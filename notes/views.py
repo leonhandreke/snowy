@@ -56,6 +56,26 @@ def note_list(request, username,
 
 def note_detail(request, username, note_id, slug='',
                 template_name='notes/note_detail.html'):
+
+    author = get_object_or_404(User, username=username)
+    note = get_object_or_404(Note, pk=note_id, author=author)
+
+    if request.user != author and note.permissions == 0:
+        return HttpResponseForbidden()
+
+    if note.slug != slug:
+        return HttpResponseRedirect(note.get_absolute_url())
+
+    body = note_to_html(note, author)
+
+    return render_to_response(template_name,
+                              {'title': note.title,
+                               'note': note, 'body': body,
+                               'request': request, 'author': author},
+                              context_instance=RequestContext(request))
+
+
+def note_to_html(note, author):
     def clean_content(xml, author):
         """
         Adds an id attribute to <link:internal> tags so that URLs can be
@@ -74,35 +94,25 @@ def note_detail(request, username, note_id, slug='',
                 continue
 
             link.setAttribute("id", str(note.pk))
-        
+
         return doc.toxml()
 
-    author = get_object_or_404(User, username=username)
-    note = get_object_or_404(Note, pk=note_id, author=author)
-
-    if request.user != author and note.permissions == 0:
-        return HttpResponseForbidden()
-        
-    if note.slug != slug:
-        return HttpResponseRedirect(note.get_absolute_url())
-    
-    # break this out into a function
     import libxslt
     import libxml2
-    
+
     style, doc, result = None, None, None
- 
+
     try:
         styledoc = libxml2.parseFile('data/note2xhtml.xsl')
         style = libxslt.parseStylesheetDoc(styledoc)
-    
+
         template = CONTENT_TEMPLATES.get(note.content_version, DEFAULT_CONTENT_TEMPLATE)
         complete_xml = template.replace('%%%CONTENT%%%', note.content.encode('UTF-8'))
         doc = libxml2.parseDoc(clean_content(complete_xml, author).encode('UTF-8'))
 
         result = style.applyStylesheet(doc,
-            {'base-user-url': "'%s'" % reverse('note_index', kwargs={'username': author.username})}
-        )
+                 {'base-user-url': "'%s'" % reverse('note_index', kwargs={'username': author.username})}
+                 )
 
         # libxml2 doesn't munge encodings, so forcibly decode from UTF-8
         body = unicode(style.saveResultToString(result), 'UTF-8')
@@ -110,9 +120,4 @@ def note_detail(request, username, note_id, slug='',
         if style != None: style.freeStylesheet()
         if doc != None: doc.freeDoc()
         if result != None: result.freeDoc()
-
-    return render_to_response(template_name,
-                              {'title': note.title,
-                               'note': note, 'body': body,
-                               'request': request, 'author': author},
-                              context_instance=RequestContext(request))
+    return body

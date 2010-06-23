@@ -27,6 +27,7 @@ from datetime import datetime
 from dateutil import parser
 
 from snowy.core.urlresolvers import reverse_full
+from snowy.notes.views import note_to_html
 from snowy.notes.models import Note
 from snowy.notes.models import NoteTag
 from snowy import settings
@@ -131,8 +132,9 @@ class NotesHandler(BaseHandler):
             notes = notes.filter(last_sync_rev__gt=int(request.GET['since']))
 
         response = {'latest-sync-revision': author.get_profile().latest_sync_rev}
+        as_html = request.GET.has_key('html')
         if request.GET.has_key('include_notes'):
-            response['notes'] = [describe_note(n) for n in notes]
+            response['notes'] = [describe_note(n, as_html) for n in notes]
         else:
             response['notes'] = [simple_describe_note(n) for n in notes]
         return response
@@ -215,13 +217,14 @@ class NoteHandler(BaseHandler):
         note = Note.objects.get(pk=note_id, author=author)
         if request.user != author and note.permissions == 0:
             return rc.FORBIDDEN
-        return {'note': [describe_note(note)]}
+        as_html = request.GET.has_key('html')
+        return {'note': [describe_note(note, as_html)]}
 
-def describe_note(note):
+def describe_note(note, as_html=False):
     def local_iso(date):
         return date.replace(tzinfo=pytz.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
 
-    return {
+    note_description = {
         'guid': note.guid,
         'title': note.title,
         'note-content': note.content,
@@ -233,6 +236,9 @@ def describe_note(note):
         'last-sync-revision': note.last_sync_rev,
         'tags': [t.name for t in note.tags.all()],
     }
+    if as_html:
+        note_description['note-content'] = note_to_html(note, note.author)
+    return note_description
 
 def simple_describe_note(note):
     kwargs = {'username': note.author.username, 'note_id': note.pk}
