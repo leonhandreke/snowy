@@ -30,12 +30,12 @@ CsrfMiddleware doesn't interfere with POST requests
 http://bitbucket.org/jespern/django-piston/issue/82/post-requests-fail-when-using-django-trunk """
 
 root_resource_oauth = Resource(handler=RootHandler, **oauth_auth)
-user_resource_oauth = Resource(handler=UserHandler)
+user_resource_oauth = Resource(handler=UserHandler, **oauth_auth)
 notes_resource_oauth = Resource(handler=NotesHandler, **oauth_auth)
 note_resource_oauth = Resource(handler=NoteHandler, **oauth_auth)
 
 root_resource_session = Resource(handler=RootHandler, **session_auth)
-user_resource_session = Resource(handler=UserHandler)
+user_resource_session = Resource(handler=UserHandler, **session_auth)
 notes_resource_session = Resource(handler=NotesHandler, **session_auth)
 note_resource_session = Resource(handler=NoteHandler, **session_auth)
 

@@ -172,24 +172,40 @@ class ApiTestCase(TestCase):
                             'latest-sync-revision': -1
                          })
 
-        # Test a user with all fields, with and without auth
-        for client in self.client, self.test1_requester:
-            response = client.get('/api/1.0/test1/')
-            self.assertEqual(response.status_code, 200)
-            self.assertEqual(json.loads(response.content),
-                             {'user-name': 'test1',
-                              'last-name': 'Doe',
-                              'notes-ref': {
-                                'href': 'http://example.com/test1/notes/',
-                                'api-ref':
-                                    'http://example.com/api/1.0/test1/notes/'
-                              },
-                              'current-sync-guid':
-                                '1886ae92-6c46-43e8-86c0-bb74df89f66c',
-                              'first-name': 'John',
-                              'latest-sync-revision': -1
-                             })
-
+        # Test a user with all fields without auth
+        response = self.client.get('/api/1.0/test1/')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content),
+                         {'user-name': 'test1',
+                          'last-name': 'Doe',
+                          'notes-ref': {
+                            'href': 'http://example.com/test1/notes/',
+                            'api-ref':
+                                'http://example.com/api/1.0/test1/notes/'
+                          },
+                          'current-sync-guid':
+                            '1886ae92-6c46-43e8-86c0-bb74df89f66c',
+                          'first-name': 'John',
+                          # no email without auth
+                          'latest-sync-revision': -1
+                         })
+        # Test a user with all fields with auth
+        response = self.test1_requester.get('/api/1.0/test1/')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content),
+                         {'user-name': 'test1',
+                           'last-name': 'Doe',
+                           'notes-ref': {
+                             'href': 'http://example.com/test1/notes/',
+                             'api-ref':
+                                 'http://example.com/api/1.0/test1/notes/'
+                           },
+                           'current-sync-guid':
+                             '1886ae92-6c46-43e8-86c0-bb74df89f66c',
+                           'first-name': 'John',
+                           'email': 'john@doe.com',
+                           'latest-sync-revision': -1
+                          })
 
     def testUserBadMethods(self):
         # PUT/POST/DELETE are not allowed

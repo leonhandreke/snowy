@@ -83,26 +83,40 @@ def basic_root():
     }
 
 # http://domain/api/1.0/user
-class UserHandler(AnonymousBaseHandler):
+class UserHandlerAnonymous(AnonymousBaseHandler):
     allowed_methods = ('GET',)
 
     @catch_and_return(ObjectDoesNotExist, rc.NOT_HERE)
     def read(self, request, username):
         user = User.objects.get(username=username)
-        profile = user.get_profile()
-        kwargs = {'username': username}
-        return {
-            'user-name': user.username,
-            'first-name': user.first_name,
-            'last-name': user.last_name,
-            'notes-ref': {
-                'api-ref': reverse_full('note_api_index', kwargs=kwargs),
-                'href': reverse_full('note_index', kwargs=kwargs),
-            },
-            'latest-sync-revision' : profile.latest_sync_rev,
-            'current-sync-guid' : profile.current_sync_uuid
-            # TODO: friends
-        }
+        return describe_user(user)
+
+class UserHandler(BaseHandler):
+    allowed_methods = ('GET',)
+    anonymous = UserHandlerAnonymous
+
+    @catch_and_return(ObjectDoesNotExist, rc.NOT_HERE)
+    def read(self, request, username):
+        user = User.objects.get(username=username)
+        user_description = describe_user(user)
+        user_description['email'] = user.email
+        return user_description
+
+def describe_user(user):
+    profile = user.get_profile()
+    kwargs = {'username': user.username}
+    return {
+        'user-name': user.username,
+        'first-name': user.first_name,
+        'last-name': user.last_name,
+        'notes-ref': {
+            'api-ref': reverse_full('note_api_index', kwargs=kwargs),
+            'href': reverse_full('note_index', kwargs=kwargs),
+        },
+        'latest-sync-revision' : profile.latest_sync_rev,
+        'current-sync-guid' : profile.current_sync_uuid
+        # TODO: friends
+    }
 
 # http://domain/api/1.0/user/notes
 class NotesHandler(BaseHandler):
