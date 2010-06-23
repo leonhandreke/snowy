@@ -17,32 +17,43 @@
 
 from django.conf.urls.defaults import *
 
-from piston.authentication import HttpBasicAuthentication, OAuthAuthentication
+from piston.authentication import OAuthAuthentication, SessionAuthentication
 from piston.resource import Resource
 
 from snowy.api.handlers import *
 
-auth = HttpBasicAuthentication(realm='Snowy')
-authoauth = OAuthAuthentication(realm='Snowy')
-ad = {'authentication': authoauth}
+oauth_auth = { 'authentication': OAuthAuthentication(realm='Snowy') }
+session_auth = { 'authentication': SessionAuthentication() }
 
 """ piston resources are marked csrf_exempt to ensure the the django
 CsrfMiddleware doesn't interfere with POST requests
 http://bitbucket.org/jespern/django-piston/issue/82/post-requests-fail-when-using-django-trunk """
 
-root_handler = Resource(handler=RootHandler, **ad)
-root_handler.csrf_exempt = getattr(root_handler.handler, 'csrf_exempt', True)
-user_handler = Resource(UserHandler)
-user_handler.csrf_exempt = getattr(user_handler.handler, 'csrf_exempt', True)
-notes_handler = Resource(handler=NotesHandler, **ad)
-notes_handler.csrf_exempt = getattr(notes_handler.handler, 'csrf_exempt', True)
-note_handler = Resource(handler=NoteHandler, **ad)
-note_handler.csrf_exempt = getattr(note_handler.handler, 'csrf_exempt', True)
+root_resource_oauth = Resource(handler=RootHandler, **oauth_auth)
+user_resource_oauth = Resource(handler=UserHandler)
+notes_resource_oauth = Resource(handler=NotesHandler, **oauth_auth)
+note_resource_oauth = Resource(handler=NoteHandler, **oauth_auth)
+
+root_resource_session = Resource(handler=RootHandler, **session_auth)
+user_resource_session = Resource(handler=UserHandler)
+notes_resource_session = Resource(handler=NotesHandler, **session_auth)
+note_resource_session = Resource(handler=NoteHandler, **session_auth)
+
+resources = [root_resource_oauth, user_resource_oauth, notes_resource_oauth,
+             note_resource_oauth, root_resource_session, user_resource_session, notes_resource_session, note_resource_session]
+
+for resource in resources:
+    resource.csrf_exempt = True
 
 urlpatterns = patterns('',
+    # these patterns have to come first because the 'more general' oauth patterns match them as well
+    url(r'1.0/(?P<username>\w+)/notes/(?P<note_id>\d+)/session_auth/$', note_resource_session),
+    url(r'1.0/(?P<username>\w+)/notes/session_auth/$', notes_resource_session),
+    url(r'1.0/(?P<username>\w+)/session_auth/$', user_resource_session),
+    url(r'1.0/session_auth/$', root_resource_session),
     # 1.0 API methods
-    url(r'1.0/(?P<username>\w+)/notes/(?P<note_id>\d+)/$', note_handler, name='note_api_detail'),
-    url(r'1.0/(?P<username>\w+)/notes/$', notes_handler, name='note_api_index'),
-    url(r'1.0/(?P<username>\w+)/$', user_handler, name='user_api_index'),
-    url(r'1.0/$', root_handler),
+    url(r'1.0/(?P<username>\w+)/notes/(?P<note_id>\d+)/$', note_resource_oauth, name='note_api_detail'),
+    url(r'1.0/(?P<username>\w+)/notes/$', notes_resource_oauth, name='note_api_index'),
+    url(r'1.0/(?P<username>\w+)/$', user_resource_oauth, name='user_api_index'),
+    url(r'1.0/$', root_resource_oauth),
 )
