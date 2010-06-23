@@ -116,7 +116,7 @@
 		<xsl:attribute name="dir">
 			<xsl:value-of select="@dir"/>
 		</xsl:attribute>
-		<xsl:apply-templates select="node()" />
+		<xsl:value-of select="translate(node(), '&#x000a;', '')" />
 	</li>
 </xsl:template>
 
