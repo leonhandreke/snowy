@@ -27,7 +27,7 @@ from datetime import datetime
 from dateutil import parser
 
 from snowy.core.urlresolvers import reverse_full
-from snowy.notes.views import note_to_html
+from snowy.notes.views import note_to_html, html_to_note
 from snowy.notes.models import Note
 from snowy.notes.models import NoteTag
 from snowy import settings
@@ -175,7 +175,13 @@ class NotesHandler(BaseHandler):
                 continue
 
             if c.has_key('title'): note.title = c['title']
-            if c.has_key('note-content'): note.content = c['note-content']
+
+            if c.has_key('note-content'):
+                if request.GET.has_key('html'):
+                    note.content = html_to_note(c['note-content'])
+                else:
+                    note.content = c['note-content']
+
             if c.has_key('note-content-version'): note.content_version = c['note-content-version']
             if c.has_key('last-change-date'): note.user_modified = clean_date(c['last-change-date'])
             if c.has_key('last-metadata-change-date'):

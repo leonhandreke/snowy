@@ -121,3 +121,25 @@ def note_to_html(note, author):
         if doc != None: doc.freeDoc()
         if result != None: result.freeDoc()
     return body
+
+def html_to_note(html):
+
+    import libxslt
+    import libxml2
+
+    style, doc, result = None, None, None
+
+    try:
+        styledoc = libxml2.parseFile('data/note2xhtml.xsl')
+        style = libxslt.parseStylesheetDoc(styledoc)
+        doc = libxml2.parseDoc(html.encode('UTF-8'))
+
+        result = style.applyStylesheet(doc)
+
+        # libxml2 doesn't munge encodings, so forcibly decode from UTF-8
+        body = unicode(style.saveResultToString(result), 'UTF-8')
+    finally:
+        if style != None: style.freeStylesheet()
+        if doc != None: doc.freeDoc()
+        if result != None: result.freeDoc()
+    return body
