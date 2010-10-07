@@ -267,6 +267,12 @@ table#content-layout {
     margin: 0.2em 0 0.2em 1em;
 }
 
+#editor {
+    width: 100%;
+    background: transparent;
+    border: none;
+}
+
 #footer {
     height: 50px;
 }

@@ -5,11 +5,9 @@
 
 {% block extra_head %}
     <script type="text/javascript" src="{{ MEDIA_URL }}js/DUI.js" charset="utf-8"></script>
-{# Disable funcooker for now #}
-{% comment %}
-    <script type="text/javascript" src="{{ MEDIA_URL }}js/funcooker.js" charset="utf-8"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.js" charset="utf-8"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.autogrow.js" charset="utf-8"></script>
     <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.scrollfollow.js" charset="utf-8"></script>
-{% endcomment %}
 {% endblock %}
 
 {% block title %}{{ title|safe }} | Notes | {{ block.super }}{% endblock %}
@@ -49,57 +47,16 @@
 {% endblock %}
 
 {% block content %}
-<table id="content-layout" cellspacing="0" cellpadding="0">
-    <tr>
-        <td id="note">
-            <h1>{{ title|safe }}</h1>
-            <div id="funcooker">
-                {{ body|safe }}
-            </div>
-        </td>
-        <td>
-{# Disable funcooker for now #}
-{% comment %}
-            <div id="toolbar">
-                <h3>Text</h3>
-                <p id="toolbar-text">
-                    <a href="javascript:fc.normalStyle();" title="Normal">A</a>
-                    <a href="javascript:fc.bold();" title="Bold"><b>A</b></a>
-                    <a href="javascript:fc.strikethrough();" title="Strikethrough"><strike>A</strike></a>
-                    <a href="javascript:fc.highlight();" title="Highlight"><span class="note-highlight">A</span></a>
-                    <a href="javascript:fc.fixedWidth();" title="Fixed Width"><span class="note-monospace">A</span></a>
-                </p>
-                <h3>Font Size</h3>
-                <p class="note-small"><a href="javascript:fc.small();">Small</a></p>
-                <p><a href="javascript:fc.normalSize();">Normal</a></p>
-                <p class="note-large"><a href="javascript:fc.large();">Large</a></p>
-                <p class="note-huge"><a href="javascript:fc.huge();">Huge</a></p>
-                <h3>Formatting</h3>
-                <p><a href="#">Bullets</a></p>
-                <p><a href="#">Increase Indent</a></p>
-                <p><a href="#">Decrease Indent</a></p>
-                <h3>Actions</h3>
-                <p><a href="#">Link</a></p>
-                <p><a href="#">Delete</a></p>
-                <p><a href="#">History</a></p>
-                <p><a href="#">Sharing</a></p>
-            </div>
-{% endcomment %}
-        </td>
-    </br>
-</table>
-{% comment %}
-<script type="text/javascript">
-var fc = null;
-$(document).ready(function() {
-    fc = new FunCooker("#funcooker");
-
-    $('#toolbar').scrollFollow({
-        speed: 200,
-        offset: 10,
-        container: 'content',
-    });
-});
-</script>
-{% endcomment %}
+<span id="edit_content">
+    <h1 style="float: left">{{ title|safe }}</h1>
+    <span style="float: right"><a href="#" onclick="$('#editingform').submit()">save</a></span>
+    <form id="editingform" action="." method="post">
+        <textarea id="editor" name="editor">{{ body|safe }}</textarea>
+    </form>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#editor').autogrow();
+        });
+    </script>
+</span>
 {% endblock %}

@@ -64,6 +64,19 @@ def note_detail(request, username, note_id, slug='',
     if request.user != author and note.permissions == 0:
         return HttpResponseForbidden()
 
+    if request.method == "POST":
+        markdown_string = request.POST['editor']
+        from tomboy_markdown import tomboy_markdown
+        tomboy_string = tomboy_markdown.markdown_to_tomboy(markdown_string)
+        if tomboy_string and tomboy_string != note.content:
+            # save note and update profile
+            note.content = tomboy_string
+            note.last_sync_rev += 1
+            note.save()
+            profile = author.get_profile()
+            profile.latest_sync_rev += 1
+            profile.save()
+
     if note.slug != slug:
         return HttpResponseRedirect(note.get_absolute_url())
 
@@ -98,8 +111,10 @@ def note_detail(request, username, note_id, slug='',
     doc = etree.fromstring(complete_xml)
 
     result = transform(doc)
-    body = str(result)
-
+    #body = str(result)
+    from tomboy_markdown import tomboy_markdown
+    body = tomboy_markdown.tomboy_to_markdown(note.content)
+    
     return render_to_response(template_name,
                               {'title': note.title,
                                'note': note, 'body': body,
