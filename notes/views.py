@@ -24,6 +24,8 @@ from django.contrib.auth.models import User
 from django.template import RequestContext
 from django.db.models import Q
 
+from datetime import datetime
+
 from snowy.notes.templates import CONTENT_TEMPLATES, DEFAULT_CONTENT_TEMPLATE
 from snowy.notes.models import *
 from snowy import settings
@@ -64,17 +66,24 @@ def note_detail(request, username, note_id, slug='',
     if request.user != author and note.permissions == 0:
         return HttpResponseForbidden()
 
+    # check if the user wants to save a note
     if request.method == "POST":
         markdown_string = request.POST['editor']
         from tomboy_markdown import tomboy_markdown
         tomboy_string = tomboy_markdown.markdown_to_tomboy(markdown_string)
+        # only save if the note was updated
         if tomboy_string and tomboy_string != note.content:
             # save note and update profile
-            note.content = tomboy_string
-            note.last_sync_rev += 1
-            note.save()
             profile = author.get_profile()
-            profile.latest_sync_rev += 1
+            new_sync_rev = profile.latest_sync_rev + 1
+            note.content = tomboy_string
+            # update modified timestamps
+            note.modified = datetime.utcnow()
+            note.user_modified = datetime.utcnow()
+            # set new sync revisions so other clients know there were changes
+            note.last_sync_rev = new_sync_rev
+            note.save()
+            profile.latest_sync_rev = new_sync_rev
             profile.save()
 
     if note.slug != slug:
@@ -111,12 +120,15 @@ def note_detail(request, username, note_id, slug='',
     doc = etree.fromstring(complete_xml)
 
     result = transform(doc)
-    #body = str(result)
+    body = str(result)
+
+    # generate the markdown version for editing
     from tomboy_markdown import tomboy_markdown
-    body = tomboy_markdown.tomboy_to_markdown(note.content)
+    markdown_body = tomboy_markdown.tomboy_to_markdown(note.content)
     
     return render_to_response(template_name,
                               {'title': note.title,
                                'note': note, 'body': body,
+                               'markdown_body': markdown_body,
                                'request': request, 'author': author},
                               context_instance=RequestContext(request))

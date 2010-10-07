@@ -47,16 +47,24 @@
 {% endblock %}
 
 {% block content %}
-<span id="edit_content">
-    <h1 style="float: left">{{ title|safe }}</h1>
-    <span style="float: right"><a href="#" onclick="$('#editingform').submit()">save</a></span>
-    <form id="editingform" action="." method="post">
-        <textarea id="editor" name="editor">{{ body|safe }}</textarea>
-    </form>
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $('#editor').autogrow();
-        });
-    </script>
+<span id="view_content">
+    <h1 class="title">{{ title|safe }}</h1>
+    <span class="action-button"><a href="#" onclick="show_editor()">edit</a></span>
+    <div>{{ body|safe }}</div>
 </span>
+<!-- editor span which is hidden by default -->
+<span id="edit_content" style="display:none;">
+    <h1 class="title">{{ title|safe }}</h1>
+    <span class="action-button"><a href="#" onclick="$('#editingform').submit()">save</a></span>
+    <form id="editingform" action="." method="post">
+        <textarea id="editor" name="editor">{{ markdown_body|safe }}</textarea>
+    </form>
+</span>
+<script type="text/javascript">
+    function show_editor() {
+        $('#view_content').remove();
+        $('#edit_content').css('display', '');
+        $('#editor').autogrow();
+    }
+</script>
 {% endblock %}

@@ -212,6 +212,15 @@ td#sidebar-container {
     margin: 0.2em 0 0.5em 0;
 }
 
+#content .title {
+    display: inline-block;
+}
+
+#content .action-button {
+    /* for the edit and save "buttons" */
+    float: right;
+}
+
 #content-layout td {
     padding: 8px;
     vertical-align: top;
