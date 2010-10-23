@@ -97,7 +97,13 @@ def openid_complete(request, **kwargs):
 def render_openid_failure(request, message, status=403, **kwargs):
     """A wrapper view around the login page to display an error message above
     the login form"""
-    messages.add_message(request, messages.ERROR, _("Error logging in: %s" % message))
+    # the most common error is a mistyped URL - make the error message less cryptic for this case
+    # TODO: Put this "error message correction" in a better place - maybe django_openid_auth
+    error_message = unicode(message)
+    if error_message.find("OpenID discovery error: Error fetching XRDS document:") > -1:
+        error_message = unicode(_("OpenID endpoint not found. Please check your OpenID."))
+
+    messages.add_message(request, messages.ERROR, _("Error logging in: ") + error_message)
     return HttpResponseRedirect(reverse('openid-login'))
 
 @login_required
