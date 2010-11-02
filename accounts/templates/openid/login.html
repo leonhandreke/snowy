@@ -20,7 +20,7 @@
 
 {% if messages %}
 {% for message in messages %}
-<div{% if message.tags %} class="{{ message.tags }}"{% endif %} style="color: red;">{{ message }}</div>
+<div{% if message.tags %} class="{{ message.tags }} center"{% endif %} style="color: red;">{{ message }}</div>
 <br />
 {% endfor %}
 {% endif %}
