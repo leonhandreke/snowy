@@ -76,7 +76,7 @@ table#content-container {
     list-style-image:url('/site_media/img/pin-down_16.png');
 }
 #sidebar ul#list-notebooks{
-    list-style-image:url();
+    list-style-image:url('/site_media/img/notebook_16.png');
 }
 #sidebar a{
     text-decoration:none;

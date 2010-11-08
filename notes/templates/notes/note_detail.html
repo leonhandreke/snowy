@@ -22,22 +22,26 @@
     <p><a href="">All notes</a></p>
     <p><a href="">Recent shit</a></p>
         <ul id="list-recent">
-	  {% for n in list_notes %}
-            <li><a href="{{ n.get_absolute_url }}{% if request.GET.query %}?query={{request.GET.query}}{% endif %}">{{ n.title|safe }}</a></li>
-	  {% endfor %}
+            {% for n in list_notes %}
+                {% if not n.pinned %}
+                    <li><a href="{{ n.get_absolute_url }}{% if request.GET.query %}?query={{request.GET.query}}{% endif %}">{{ n.title|safe }}</a></li>
+                {% endif %}
+	        {% endfor %}
         </ul>
         
     <p><a href="">Pinned notes</a></p>
         <ul id="list-pinned">
-            <li><a href="">Hackfest plan</a></li>
-            <li><a href="">Un design qui change tout le temps</a></li>
-            <li><a href="" class="sidebar-item-selected">Los Angeles</a></li>
+            {% for n in list_notes %}
+                {% if n.pinned %}
+                    <li><a href="{{ n.get_absolute_url }}{% if request.GET.query %}?query={{request.GET.query}}{% endif %}">{{ n.title|safe }}</a></li>
+                {% endif %}
+	        {% endfor %}
         </ul>
     <p><a href="">Notebooks</a></p>
-        <ul id="list-notebooks">
-            <li><a href="">Howto</a></li>
-            <li><a href="">Todo</a></li>
-        </ul>
+    <ul id="list-notebooks">
+        {% user_notebook_list request author as all_notebooks %}
+        {% include "notes/notebook_list_snippet.html" %}
+    </ul>
     <p><a href="">Others' notes</a></p>
     <p><a href="">Contacts</a></p>
 </div>
