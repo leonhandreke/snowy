@@ -66,139 +66,42 @@ table#content-container {
     border: 0;
 }
 
-td#sidebar-container {
-    width: 15%;
-    
-    margin: 0;
-    vertical-align: top;
+#search-bar{
+    padding:0.7em;
+}
+#sidebar{
+    width:20%;
+    float:left;
+    padding:0.7em;
+}
+#sidebar ul{
+    margin:0;
+    padding-left:2em;
+}
+#sidebar ul#list-recent{
+    list-style-image:url('/site_media/img/note_16.png');
+}
+#sidebar ul#list-pinned{
+    list-style-image:url('/site_media/img/pin-down_16.png');
+}
+#sidebar ul#list-notebooks{
+    list-style-image:url();
+}
+#sidebar a{
+    text-decoration:none;
+    color:black;
+}
+#sidebar a:hover{
+    text-decoration:underline;
+    color:blue;
+}
+#sidebar p{
+    font-size:1.2em;
 }
 
-#sidebar {
-    margin: 20px 0 20px 0;
-    padding-bottom: 20px;
-
-    background-color: #403b33;
-    font-family: Trebuchet MS, Calibri, Verdana, Arial, sans-serif;
-    font-size: 1.05em;
-}
-
-#sidebar h3 {
-    font-family: Verdana, Candara, Tahoma, Arial, sans-serif;
-    text-transform: uppercase;
-}
-
-#sidebar input#search {
-    width: 250px;
-    margin: 4px;
-    padding: 3px 3px 3px 30px;
-    
-    border: 1px solid #bababa;
-    background: #73685d url('/site_media/img/search.png') center left no-repeat;
-    
-    color: #FFFFFF;
-}
-
-#sidebar input#search.dim {
-    color: #aba49e;
-    font-style: italic;
-}
-
-#sidebar hr {
-    height: 1px;
-    margin: 0.6em 0;
-    background-color: #aba49e;
-    border: 0;
-}
-
-#sidebar ul {
-    margin: 0;
-    padding: 0;
-}
-
-#sidebar li {
-    padding: 0.5em 0 0.25em 14px;
-    list-style-position: inside;
-}
-
-#sidebar li a {
-    position: relative;
-    top: -0.2em;
-
-    color: #ffffff;
-    text-decoration: none;
-}
-
-#sidebar .more-item {
-    list-style-type: none; 
-    padding-left: 37px;
-}
-
-#sidebar .more-item a {
-    text-decoration: underline;
-}
-
-#sidebar-note-list, #sidebar-notebook-list {
-    margin: 3px 0 0 0;
-}
-
-#sidebar-note-list .note-item {
-    list-style-image: url('/site_media/img/note_16.png'); 
-    padding-right: 12px;
-}
-
-#sidebar-note-list .pinned {
-    list-style-image: url('/site_media/img/pin-down_16.png'); 
-}
-
-#sidebar-note-list .selected {
-    background-color: #d6e1c7;
-    color: #545247;
-}
-
-#sidebar-note-list .selected::before {
-    content: ' ';
-    float: right;
-    display: block;
-    background-color: #edece6;
-    margin-top: -7.5px;
-    margin-right: -23.5px;
-    border-top: 15.5px solid transparent;
-    border-right: 0 solid transparent;
-    border-bottom: 15.5px solid transparent;
-    border-left: 12px solid #d6e1c7;
-}
-
-#sidebar-note-list .selected a {
-    color: #000000;
-}
-
-#sidebar-note-list #new-note {
-    list-style-image: url('/site_media/img/note-new_16.png'); 
-}
-
-#sidebar-note-list .more-item a {
-    color: #8c8985;
-}
-
-#sidebar-notebook-list {
-    margin: 0;
-    background-color: #8ecbd2;
-    color: #ffffff;
-}
-
-#sidebar-notebook-list h3 {
-    margin: 0.3em 14px;
-    font-size: 1.0em;
-    color: #578186;
-    padding-top: 7px;
-}
-
-#sidebar-notebook-list .notebook-item {
-    list-style-image: url('/site_media/img/notebook_16.png'); 
-}
-
-#sidebar-notebook-list .more-item a {
-    color: #bbe0e4;
+.sidebar-item-selected{
+    font-weight:bold;
+    /*text-decoration:underline;*/
 }
 
 #content {
@@ -218,53 +121,7 @@ td#sidebar-container {
 }
 
 table#content-layout {
-    width: 100%;
-}
-
-#toolbar {
-    position: relative;
-    float: right;
-    width: 150px;
-    padding: 8px;
-
-    background-color: #dbe1c7;
-    border: 1px solid #b7beab;
-
-    color: #6d7063;
-}
-
-#toolbar a, #toolbar a:link, #toolbar a:active, #toolbar a:visited {
-    color: #6d7063;
-    text-decoration: none;
-}
-
-#toolbar:first-child {
-    margin-top: 0;
-    padding-top: 0;
-}
-
-#toolbar h3 {
-    margin: 0.5em 0 0.3em 0;
-
-    font-family: Candara, Verdana, Tahmoa, Arial, sans-serif;
-    font-weight: bold;
-    text-transform: uppercase;
-    color: #acb5a0;
-}
-
-#toolbar #text {
-    color: #000000;
-    font-size: 1.2em;
-}
-
-#toolbar-text a, #toolbar-text a:link, #toolbar-text a:active, #toolbar-text a:visited {
-    color: #000000;
-    text-decoration: none;
-    margin-right: 0.5em;
-}
-
-#toolbar p {
-    margin: 0.2em 0 0.2em 1em;
+    width: 75%;
 }
 
 #footer {
