@@ -46,25 +46,22 @@
                 </td>
             </tr>
         </table>
-{% block content-container %}
-        <table id="content-container" cellspacing="0" cellpadding="0">
-            <tr>
+
 {% block sidebar-container %}
-                <td id="sidebar-container">
-                    <div id="sidebar">
 {% block sidebar %}
+<div id="sidebar"></div>
 {% endblock %}
-                    </div>
-                </td>
 {% endblock %}
-                <td id="content">
+
+
+{% block content-container %}
+<div id="main">
 {% block content %}
+<div id="main-content"></div>
 {% endblock %}
-                </td>
-            </tr>
-        </table>
+</div>
 {% endblock %}
-    </div>
+
 
     <div id="footer">
 {% block footer %}

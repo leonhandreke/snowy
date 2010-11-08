@@ -1,8 +1,9 @@
-html, body {
-    background-color: #4e6960;
-    font-size: 0.95em;
-    margin: 0;
-    padding: 0;
+body{
+    margin:0px;
+    font-family:Liberation Sans, sans-serif;
+}
+h1{
+    text-shadow: 2px 2px 0px #FFF;  /* 2px right, 2px below, 0px blur */
 }
 
 a img {
@@ -14,18 +15,8 @@ a, a:link, a:hover, a:active, a:visited {
     text-decoration: underline;
 }
 
-h1 {
-    color: #d3643b;
-    font-family: Trebuchet MS, Calibri, Verdana, Arial, sans-serif;
-}
-
 .clear {
     clear: both;
-}
-
-#body {
-    background-color: #94c7b6;
-    padding: 10px;
 }
 
 #header {
@@ -104,11 +95,33 @@ table#content-container {
     /*text-decoration:underline;*/
 }
 
-#content {
-    padding: 12px 12px 12px 24px;
-    background-color: #edece6;
-    vertical-align: top;
-    font-family: Candara, Verdana, Tahmoa, Arial, sans-serif;
+#main{
+/*    margin-top:3em;*/
+    width:75%;
+    border:2px solid #ffcc33;
+    background-color:#FFE596;
+    float:left;
+    border-radius:1em;
+    background:-webkit-gradient(
+            linear,
+            left bottom,
+            left top,
+            color-stop(0.95, rgb(255,229,150)),
+            color-stop(0.70, rgb(255,255, 255))
+    );
+    background:-moz-linear-gradient(
+            center bottom,
+            rgb(255,229,150) 95%,
+            rgb(255,255,255) 70%
+    );
+}
+#main-toolbar{
+    padding-left:1em;
+    padding-right:1em;
+    border-bottom:1px solid black;
+}
+#main-content{
+    padding:1em;
 }
 
 #content h1 {
@@ -121,7 +134,7 @@ table#content-container {
 }
 
 table#content-layout {
-    width: 75%;
+    /*width: 75%;*/
 }
 
 #footer {
