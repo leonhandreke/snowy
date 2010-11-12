@@ -20,32 +20,40 @@
 </head>
 
 <body>
-    <div id="body">
-        <table id="header" cellpadding="0" cellspacing="0">
+<div id="body">
+
+<div id="header">
+    <div id="header-left">
+        <table border="0" cellspacing="0" cellpadding="0">
             <tr>
-                <td id="header-logo">
-                    <a href="/">
-                        <img src="{{ MEDIA_URL }}img/tomboy-logo.png" alt="{% trans "tomboy: simple note-taking." %}"/>
-                    </a>
-                </td>
-                <td id="header-auth">
-                    {% if user.is_authenticated %}
-                    <h3>
-                        {{ user }}
-                    </h3>
-                    <p><a href="{% url preferences %}">{% trans "preferences" %}</a> / <a href="{% url django.contrib.auth.views.logout %}">{% trans "log out" %}</a></p>
-                    {% else %}
-                    <p>{% trans "hello stranger! care to " %}<a href="{% url openid-login %}">{% trans "log in" %}</a>{% trans "?" %}</p>
-                    <!--<p><small>{% trans "not a member yet?" %} <a href="{% url registration.views.register %}">{% trans "Sign up." %}</a></small></p>-->
-                    {% endif %}
-                </td>
-                <td id="header-avatar">
-                    {% if user.is_authenticated %}
-                    <a href="{% url notes.views.note_index user.username %}">{% gravatar_img_for_user user 64 %}</a>
-                    {% endif %}
-                </td>
+                <td><img id="header-logo" src="{{ MEDIA_URL }}img/tomboy-logo.png" alt="{% trans "tomboy: simple note-taking." %}"/></td>
+                <td valign="middle"></td>
             </tr>
         </table>
+    </div>
+    <div id="header-right">
+    <table border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td id="header-avatar">
+                {% if user.is_authenticated %}
+                <a href="{% url notes.views.note_index user.username %}">{% gravatar_img_for_user user 64 %}</a>
+                {% endif %}
+            </td>
+            <td  valign="middle">
+                    {% if user.is_authenticated %}
+                    <b>{{ user }}</b>
+                    | <a href="{% url preferences %}">{% trans "Preferences" %}</a> 
+                    | <a href="{% url django.contrib.auth.views.logout %}">{% trans "Log out" %}</a>
+                    {% else %}
+                    {% trans "Hello stranger! care to " %}<a href="{% url openid-login %}">{% trans "log in" %}</a>{% trans "?" %}</p>
+                    <!--<small>{% trans "not a member yet?" %} <a href="{% url registration.views.register %}">{% trans "Sign up." %}</a></small>-->
+                    {% endif %}
+            </td>
+        </tr>
+    </table>
+    </div>
+</div>
+
 
 {% block sidebar-container %}
 {% block sidebar %}

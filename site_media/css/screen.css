@@ -19,37 +19,57 @@ a, a:link, a:hover, a:active, a:visited {
     clear: both;
 }
 
-#header {
-    width: 100%;
-    border-spacing: 10px;
+
+#header{
+    background-color:black;/*#9db8d2;*/
+    border-bottom:1px solid black;
+    height:2.2em;
+    margin-bottom:1em;
+    color:#999;
+    
+    background:-webkit-gradient(
+            linear,
+            left bottom,
+            left top,
+            color-stop(0.7, rgb(0,0,0)), /* black arrête à 90% vers le haut */
+            color-stop(0.0, rgb(80,80,80)) /* gris commence à 100% vers le haut */
+    );
+    background:-moz-linear-gradient(
+            center bottom,
+            rgb(0,0,0) 70%,
+            rgb(80,80,80) 0%
+    );
+}
+#header a{
+    color:white;
+}
+#header table td{
+    padding-right:10px;
+}
+#header-left{
+    float:left;
+}
+#header-right{
+    float:right;
+}
+#header-right table{
+    height:2.2em;
 }
 
 #header-logo {
-    width: 251px;
+    float:left;
+    height:2.2em;
+    width:auto;
+    margin-right:2em;
 }
-
-#header-auth {
-    margin: 0.5em 1em 0 0;
-    text-align: right;
-    vertical-align: middle;
-
-    font-family: Trebuchet MS, Calibri, Verdana, Arial, sans-serif;
-    white-space: nowrap;
-}
-
-#header-auth p, #header-auth h3 {
-    margin: 0;
-    padding: 0;
-}
-
-#header-avatar {
-    margin-left: 5px;
-    width: 64px;
-}
-
 #header-avatar img {
-    border: 2px solid #FFFFFF;
+    height: 2em;
+    width:auto;
+    /* the total height is 2.2 em */
+    margin-top:0.1em;
+    margin-bottom:0.1em;
 }
+
 
 table#content-container {
     padding: 0 10px 20px 10px;
@@ -144,6 +164,48 @@ table#content-layout {
 .form-field th {
     text-align: left;
 }
+
+#sharing-dropdown{
+    width:20em;
+    padding:0.5em;
+    min-height:15em;
+    border:1px solid black;
+}
+#sharing-dropdown table{
+    border:0;
+}
+
+#login-selector{
+    margin:1em;
+    width:20em;
+    margin-right:auto;
+    margin-left:auto;
+}
+
+#login{
+    width:20em;
+    margin-top:3em;
+    margin-left:auto;
+    margin-right:auto;
+    padding:2em;
+    border:2px solid #ffcc33;
+    background-color:#FFE596;
+    border-radius:1em;
+    background:-webkit-gradient(
+            linear,
+            left bottom,
+            left top,
+            color-stop(0.95, rgb(255,229,150)),
+            color-stop(0.70, rgb(255,255, 255))
+    );
+    background:-moz-linear-gradient(
+            center bottom,
+            rgb(255,229,150) 95%,
+            rgb(255,255,255) 70%
+    );
+    
+}
+
 
 /* Note-specific styles */
 
