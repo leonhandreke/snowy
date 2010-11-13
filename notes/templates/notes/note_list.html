@@ -4,7 +4,11 @@
 
 {% block title %}{% trans "All Notes" %} | {{ block.super }}{% endblock %}
 
+<!-- TODO: add the sidebar !-->
+
 {% block content-container %}
+<div id="main">
 <h1>{% trans "All Notes" %}</h1>
 {% include "notes/note_list_snippet.html" %}
+</div>
 {% endblock %}
