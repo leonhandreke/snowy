@@ -113,9 +113,12 @@ a, a:link, a:hover, a:active, a:visited {
 /*    margin-top:3em;*/
     width:75%;
     border:2px solid #ffcc33;
-    background-color:#FFE596;
+    /*background-color:#FFE596;*/
     float:left;
     border-radius:1em;
+    background-image:url("/site_media/img/snowy-bg.png");
+    background-repeat:repeat-x;
+    /*
     background:-webkit-gradient(
             linear,
             left bottom,
@@ -127,7 +130,7 @@ a, a:link, a:hover, a:active, a:visited {
             center bottom,
             rgb(255,229,150) 95%,
             rgb(255,255,255) 70%
-    );
+    );*/
 }
 #main-toolbar{
     padding-left:1em;
@@ -174,8 +177,11 @@ a, a:link, a:hover, a:active, a:visited {
     margin-right:auto;
     padding:2em;
     border:2px solid #ffcc33;
-    background-color:#FFE596;
+    /*background-color:#FFE596;*/
     border-radius:1em;
+    background-image:url("/site_media/img/snowy-bg.png");
+    background-repeat:repeat-x;
+    /*
     background:-webkit-gradient(
             linear,
             left bottom,
@@ -187,8 +193,7 @@ a, a:link, a:hover, a:active, a:visited {
             center bottom,
             rgb(255,229,150) 95%,
             rgb(255,255,255) 70%
-    );
-    
+    );*/
 }
 
 
