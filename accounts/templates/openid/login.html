@@ -26,7 +26,7 @@
 {% endif %}
 
 
-<div id="login">
+<div id="misc-page">
 <h1>{% trans "Log in with your OpenID" %}</h1>
 <p>Got a <a href="http://openid.net/get-an-openid/" alt="Get an OpenID">custom OpenID</a> login? Enter it here:</p>
 <form name="fopenid" action="{{ action }}" method="post">
@@ -61,7 +61,7 @@
 </form>
 </div>
 
-<div id="login-selector"><a href="{% url auth_login %}">Old-school login?</a></div>
+<div id="misc-page-footer"><a href="{% url auth_login %}">Old-school login?</a></div>
 
 
 

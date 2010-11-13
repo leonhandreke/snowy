@@ -3,6 +3,7 @@
 {% load i18n %}
 
 {% block content %}
+<div id="misc-page">
 <h1>{% trans "Preferences" %}</h1>
 {% if user.has_usable_password %}
 <h3>{% trans "Change your password" %}</h3>
@@ -55,4 +56,6 @@
 </form>
 
 {#<h3>{% trans "Registered Applications" %}</h3>#}
+
+</div>
 {% endblock %}

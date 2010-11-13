@@ -160,15 +160,15 @@ a, a:link, a:hover, a:active, a:visited {
     border:0;
 }
 
-#login-selector{
+#misc-page-footer{
     margin:1em;
-    width:20em;
+    width:30em;
     margin-right:auto;
     margin-left:auto;
 }
 
-#login{
-    width:20em;
+#misc-page{
+    width:30em;
     margin-top:3em;
     margin-left:auto;
     margin-right:auto;
