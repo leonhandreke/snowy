@@ -37,6 +37,6 @@
 
 <div id="login-selector">
 <a href="{% url registration.views.register %}">{% trans "Sign up" %}</a> | 
-<a href="../../openid/login/">OpenID login?</a></div> <!-- FIXME: this url is a hack !-->
+<a href="{% url openid-login %}">OpenID login?</a></div>
 {% endblock %}
 
