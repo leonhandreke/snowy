@@ -19,7 +19,7 @@
 {% user_notes_list request author as list_notes %}
 <div id="sidebar">
     <input type="button" name="new-note" value="Create a new note" />
-    <p><a href="">All notes</a></p>
+    <p><a href="{% url note_list author.username %}">All notes</a></p>
     <p><a href="">Recent shit</a></p>
         <ul id="list-recent">
             {% for n in list_notes %}
@@ -46,6 +46,11 @@
     <p><a href="">Contacts</a></p>
 </div>
 {% endblock %}
+
+
+
+
+
 {% comment %}
 <div id="sidebar-note-list">
     <ul>
@@ -75,7 +80,33 @@
 </div>
 {% endblock %}
 {% endcomment %}
+
+
+
+
+
+
+
+
+
 {% block content %}
+
+<div id="main-toolbar">
+    <!--<input type="button" name="some_name" value="Go back" /> !-->
+    <input type="button" name="some_name" value="Sharing" />
+    <input type="button" name="some_name" value="Notebooks" />
+    <input type="button" name="some_name" value="Formatting" />
+    <input type="button" name="some_name" value="Delete" style="float:right;" />
+</div>
+<div id="main-content">
+    <h1>{{ title|safe }}</h1>
+    {{ body|safe }}
+</div>
+
+
+
+{# Disable funcooker and the old table layout #}
+{% comment %}
 <table id="content-layout" cellspacing="0" cellpadding="0">
     <tr>
         <td id="note">
@@ -85,8 +116,7 @@
             </div>
         </td>
         <td>
-{# Disable funcooker for now #}
-{% comment %}
+
             <div id="toolbar">
                 <h3>Text</h3>
                 <p id="toolbar-text">
@@ -111,10 +141,11 @@
                 <p><a href="#">History</a></p>
                 <p><a href="#">Sharing</a></p>
             </div>
-{% endcomment %}
         </td>
     </br>
 </table>
+{% endcomment %}
+
 {% comment %}
 <script type="text/javascript">
 var fc = null;

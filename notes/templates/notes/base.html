@@ -4,6 +4,7 @@
 
 {% block sidebar %}
 {% if author %}
+<!-- FIXME: this needs to be taken out of the sidebar and put between the sidebar div and the main div !-->
 <form method="GET" name="searchForm" action="">
     {% if request.GET.query %}
     <input type="text" id="search" name="query" accesskey="s" value="{{request.GET.query}}">
