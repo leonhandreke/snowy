@@ -20,7 +20,7 @@
 <div id="sidebar">
     <input type="button" name="new-note" value="Create a new note" />
     <p><a href="{% url note_list author.username %}">All notes</a></p>
-    <p><a href="">Recent shit</a></p>
+    <p><a href="">Recent shit</a></p><!-- FIXME !-->
         <ul id="list-recent">
             {% for n in list_notes %}
                 {% if not n.pinned %}
@@ -37,13 +37,13 @@
                 {% endif %}
 	        {% endfor %}
         </ul>
-    <p><a href="">Notebooks</a></p>
+    <p><a href="">Notebooks</a></p><!-- FIXME !-->
     <ul id="list-notebooks">
         {% user_notebook_list request author as all_notebooks %}
         {% include "notes/notebook_list_snippet.html" %}
     </ul>
-    <p><a href="">Others' notes</a></p>
-    <p><a href="">Contacts</a></p>
+    <p><a href="">Others' notes</a></p><!-- TODO !-->
+    <p><a href="">Contacts</a></p><!-- TODO !-->
 </div>
 {% endblock %}
 

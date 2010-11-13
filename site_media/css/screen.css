@@ -71,12 +71,6 @@ a, a:link, a:hover, a:active, a:visited {
 }
 
 
-table#content-container {
-    padding: 0 10px 20px 10px;
-    width: 100%;
-    border: 0;
-}
-
 #search-bar{
     padding:0.7em;
 }
@@ -146,15 +140,6 @@ table#content-container {
 
 #content h1 {
     margin: 0.2em 0 0.5em 0;
-}
-
-#content-layout td {
-    padding: 8px;
-    vertical-align: top;
-}
-
-table#content-layout {
-    /*width: 75%;*/
 }
 
 #footer {
