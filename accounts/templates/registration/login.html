@@ -6,26 +6,37 @@
 {% if form.errors %}
 <p>{% trans "Your username and password didn't match. Please try again." %}</p>
 {% endif %}
-<h3>{% trans "Log in" %}</h3>
+
+<div id="login">
+<h1>{% trans "Log in" %}</h1>
 
 <form method="post" action=".">
 <table>
 <tr>
-    <td>{{ form.username.label_tag }}</td>
+    <td>{{ form.username.label_tag }}:</td>
     <td>{{ form.username }}</td>
 </tr>
 <tr>
-    <td>{{ form.password.label_tag }}</td>
+    <td>{{ form.password.label_tag }}:</td>
     <td>{{ form.password }}</td>
 </tr>
+<tr>
+    <td></td>
+    <td><input type="submit" value="Go ahead, make my day!" /></td>
+</tr>
+
 </table>
 
-<input type="submit" value="login" />
+
 {% if next %}
 <input type="hidden" name="next" value="{{ next }}" />
 {% endif %}
 </form>
+</div>
 
-<p><small>{% trans "not a member yet?" %} <a href="{% url registration.views.register %}">{% trans "Sign up." %}</a></small></p>
+
+<div id="login-selector">
+<a href="{% url registration.views.register %}">{% trans "Sign up" %}</a> | 
+<a href="../../openid/login/">OpenID login?</a></div> <!-- FIXME: this url is a hack !-->
 {% endblock %}
 
