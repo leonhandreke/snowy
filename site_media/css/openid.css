@@ -1,5 +1,6 @@
 #openid_form {
-	width: 696px;
+	/* THIS IS NOT 1998, GTFO
+	width: 696px;*/
 }
 	#openid_form legend {
 		font-weight: bold;
