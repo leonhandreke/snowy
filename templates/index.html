@@ -4,6 +4,7 @@
 {% load urlresolvers %}
 
 {% block content %}
+<div id="login">
 {% blocktrans with site.name as n %}
 <h1>Welcome to {{ n }}!</h1>
 <p>{{ n }} is Tomboy's best friend on the web.  {{ n }} is an online service
@@ -22,4 +23,5 @@ your ex-girlfriends and burn risotto if not watched carefully.</p>
 check out the TODO and start contributing.  P.S., Have I told you how much you
 rock?</p>
 {% endblocktrans %}
+</div>
 {% endblock %}
