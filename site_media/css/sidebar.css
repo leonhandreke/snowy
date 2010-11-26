@@ -28,7 +28,8 @@
 /* Search field */
 #sidebar input#search {
     width: 250px;
-    margin: 4px;
+    margin: 10px;
+    margin-bottom: 5px;
     padding: 3px 3px 3px 30px;
     
     border: 1px solid #bababa;
