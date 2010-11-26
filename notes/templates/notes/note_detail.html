@@ -18,6 +18,8 @@
 {{ block.super }}
 {% user_notes_list request author as list_notes %}
 <div id="sidebar-note-list">
+    <h3><a href="all">All Notes</a></h3>
+    <h3>Recent Notes</h3>
     <ul>
         {% for n in list_notes %}
         <li class="note-item{% if n.pinned %} pinned{% endif %}{% ifequal n note %} selected{% endifequal %}"><a href="{{ n.get_absolute_url }}{% if request.GET.query %}?query={{request.GET.query}}{% endif %}">{{ n.title|safe }}</a></li>
@@ -26,11 +28,8 @@
         <div style="text-align: center; margin: 3px;">
             <a href="."><input type="button" value="{% trans "Clear Search" %}" style="width:90%;"></a>
         </div>
-        {% else %}
-        <li class="more-item"><a href="{% url note_list author.username %}">{% trans "More Notes..." %}</a></li>
         {% endif %}
     </ul>
-    <hr />
     <ul>
 {# Enable when we allow editing #}
 {% comment %}
@@ -43,7 +42,6 @@
     <ul> 
 {% user_notebook_list request author as all_notebooks %}
 {% include "notes/notebook_list_snippet.html" %}
-        <li class="more-item"><a href="#">{% trans "More Notebooks..." %}</a></li>
     </ul>
 </div>
 {% endblock %}

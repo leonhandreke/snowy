@@ -3,6 +3,7 @@
 {% load i18n %}
 
 {% block sidebar %}
+    <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/sidebar.css" media="screen">
 {% if author %}
 <form method="GET" name="searchForm" action="">
     {% if request.GET.query %}

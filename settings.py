@@ -148,7 +148,7 @@ INSTALLED_APPS = [
 ]
 
 # Maximum number of notes to show on the notes_detail list.
-SNOWY_LIST_MAX_NOTES = 18
+SNOWY_LIST_MAX_NOTES = 9
 
 ACCOUNT_ACTIVATION_DAYS = 15
 
