@@ -156,33 +156,31 @@ table.input-form {
 }
 
 .object_list thead tr {
-    background-color: #73685d;
-    font-family: Verdana, Candara, Tahoma, Arial, sans-serif;
     text-transform: uppercase;
-    color: #FFFFFF;
+}
+
+.object_list thead th {
+    border-bottom: 1px dashed black;
+    text-align: left;
+    padding: 8px;
+}
+
+.object_list tbody {
+    border-top: 2px dashed black;
 }
 
 .object_list tfoot tr {
-    background-color: #403b33;
     text-align: center;
-    color: #ffffff;
     height: 1.7em;
 }
 
-.object_list tfoot a {
-    color: #8ecbd2;
-}
-
 .object_list td {
-    padding: 5px 3px;
+    padding: 7px 3px;
 }
 
-.row-even {
-    background-color: #d4e1d9;
-}
-
-.row-odd {
-    background-color: #edece6;
+.object_list td a {
+    text-decoration: none;
+    color: #000000;
 }
 
 .object_list td.icon {
