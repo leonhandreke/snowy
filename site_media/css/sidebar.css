@@ -2,7 +2,9 @@
     margin: 20px 0 20px 0;
     padding-bottom: 20px;
 
-    background-color: #403b33;
+    background-color: #ffffff;
+    border: 3px solid black;
+    border-right: none;
     font-family: Trebuchet MS, Calibri, Verdana, Arial, sans-serif;
     font-size: 1.05em;
     border-top-left-radius: 5px;
@@ -30,9 +32,8 @@
     padding: 3px 3px 3px 30px;
     
     border: 1px solid #bababa;
-    background: #73685d url('/site_media/img/search.png') center left no-repeat;
-    
-    color: #FFFFFF;
+    border-radius: 5px; 
+    background: url('/site_media/img/search.png') center left no-repeat;
 }
 
 #sidebar input#search.dim {
@@ -62,7 +63,7 @@
     position: relative;
     top: -0.2em;
 
-    color: #ffffff;
+    color: black;
     text-decoration: none;
 }
 
@@ -120,7 +121,6 @@
 
 #sidebar-notebook-list {
     margin: 0;
-    /* background-color: #8ecbd2; */
     color: #ffffff;
 }
 
