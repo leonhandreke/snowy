@@ -55,6 +55,10 @@
 {% endblock %}
 
 {% block content %}
+<div id="note-header">
+    <button class="header-button">Share</button>
+    <button class="header-button" style="float:right;">Delete</button>
+</div>
 <table id="content-layout" cellspacing="0" cellpadding="0">
     <tr>
         <td id="note">
@@ -92,7 +96,7 @@
             </div>
 {% endcomment %}
         </td>
-    </br>
+    </tr>
 </table>
 {% comment %}
 <script type="text/javascript">

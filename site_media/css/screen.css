@@ -73,26 +73,6 @@ td#sidebar-container {
     vertical-align: top;
 }
 
-#content {
-    padding: 12px 12px 12px 24px;
-    background-color: #edece6;
-    vertical-align: top;
-    font-family: Candara, Verdana, Tahmoa, Arial, sans-serif;
-}
-
-#content h1 {
-    margin: 0.2em 0 0.5em 0;
-}
-
-#content-layout td {
-    padding: 8px;
-    vertical-align: top;
-}
-
-table#content-layout {
-    width: 100%;
-}
-
 #toolbar {
     position: relative;
     float: right;
@@ -147,46 +127,12 @@ table#content-layout {
     text-align: left;
 }
 
-/* Note-specific styles */
-
-.note-datetime {
-    color: #666666;
-    font-style: italic;
-    font-size: 0.8em;
+.center {
+    text-align: center;
 }
 
-.note-highlight {
-    background-color: yellow;
-}
 
-.note-monospace {
-    font-family: Consolas, monospace;
-}
-
-.note-size-small {
-    font-size: 0.8em;
-}
-
-.note-size-large {
-    font-size: 1.5em;
-}
-
-.note-size-huge {
-    font-size: 2.0em;
-}
-
-a.link-internal {
-    color: #204A87;
-}
-
-a.link-broken {
-    color: #555753;
-}
-
-a.link-url {
-    color: #3465A4;
-}
-
+/* CSS for the list pages */
 table.input-form {
     border-spacing: 13px;
 }
@@ -252,6 +198,3 @@ table.input-form {
     text-align: center;
 }
 
-.center {
-    text-align: center;
-}
