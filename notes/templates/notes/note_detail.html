@@ -18,10 +18,10 @@
 {{ block.super }}
 {% user_notes_list request author as list_notes %}
 <div id="sidebar-note-list">
-    <h3><a href="all">All Notes</a></h3>
+    <h3><a href="{% url note_list author.username %}">All Notes</a></h3>
     <h3>Recent Notes</h3>
     <ul>
-        {% for n in list_notes %}
+    {% for n in list_notes %}
         <li class="note-item{% if n.pinned %} pinned{% endif %}{% ifequal n note %} selected{% endifequal %}"><a href="{{ n.get_absolute_url }}{% if request.GET.query %}?query={{request.GET.query}}{% endif %}">{{ n.title|safe }}</a></li>
         {% endfor %}
         {% if request.GET.query %}

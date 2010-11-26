@@ -13,7 +13,7 @@
 
 #note-header {
     border-bottom: 2px solid black;
-    padding: 12px 12px 12px 32px;
+    padding: 8px 12px 8px 24px;
     background: -webkit-gradient(linear, left top, left bottom, from(#f5e599), to(#edece6));
     background: -moz-linear-gradient(top,  #f5e599, #edece6);
 }
