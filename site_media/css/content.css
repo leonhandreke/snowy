@@ -1,12 +1,16 @@
 #content-container {
     border-radius: 5px;
     border: 3px solid black;
+    /* In case the content does not fill up the container just blend in */
+    vertical-align: top;
+    background-color: #edece6;
 }
+
 #content {
     background-color: #edece6;
     vertical-align: top;
     font-family: Candara, Verdana, Tahmoa, Arial, sans-serif;
-
+    height: inherit;
     padding: 12px 12px 12px 24px;
 }
 
@@ -15,6 +19,8 @@
 }
 
 #note-header {
+    position: relative;
+    top: 0px;
     border-bottom: 2px solid black;
     padding: 8px 12px 8px 24px;
     background: -webkit-gradient(linear, left top, left bottom, from(#f5e599), to(#edece6));
