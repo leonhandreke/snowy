@@ -1,10 +1,13 @@
+#content-container {
+    border-radius: 5px;
+    border: 3px solid black;
+}
 #content {
     background-color: #edece6;
     vertical-align: top;
     font-family: Candara, Verdana, Tahmoa, Arial, sans-serif;
 
-    border-radius: 5px;
-    border: 3px solid black;
+    padding: 12px 12px 12px 24px;
 }
 
 #content h1 {
@@ -28,7 +31,6 @@
 
 table#content-layout {
     width: 100%;
-    padding: 12px 12px 12px 24px;
 }
 
 /* Note-specific styles */

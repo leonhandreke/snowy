@@ -47,8 +47,8 @@
                 </td>
             </tr>
         </table>
-{% block content-container %}
-        <table id="content-container" cellspacing="0" cellpadding="0">
+{% block layout-container %}
+        <table id="layout-container" cellspacing="0" cellpadding="0">
             <tr>
 {% block sidebar-container %}
                 <td id="sidebar-container">
@@ -58,9 +58,15 @@
                     </div>
                 </td>
 {% endblock %}
-                <td id="content">
-{% block content %}
-{% endblock %}
+                <td id="content-container">
+                    <div id="content-header">
+                        {% block content-header %}
+                        {% endblock %}
+                    </div>
+                    <div id="content">
+                        {% block content %}
+                        {% endblock %}
+                    </div>
                 </td>
             </tr>
         </table>
