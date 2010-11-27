@@ -3,11 +3,10 @@
     border: 3px solid black;
     /* In case the content does not fill up the container just blend in */
     vertical-align: top;
-    background-color: #edece6;
+    background-color: #ffffff;
 }
 
 #content {
-    background-color: #edece6;
     vertical-align: top;
     font-family: Candara, Verdana, Tahmoa, Arial, sans-serif;
     height: inherit;
@@ -23,8 +22,8 @@
     top: 0px;
     border-bottom: 2px solid black;
     padding: 8px 12px 8px 24px;
-    background: -webkit-gradient(linear, left top, left bottom, from(#f5e599), to(#edece6));
-    background: -moz-linear-gradient(top,  #f5e599, #edece6);
+    background: -webkit-gradient(linear, left top, left bottom, from(#f5e599), to(#ffffff));
+    background: -moz-linear-gradient(top,  #f5e599, #ffffff);
 }
 .header-button {
     padding: 0.6em 1.5em 0.6em 1.5em;
