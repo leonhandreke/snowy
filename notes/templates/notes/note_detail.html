@@ -21,14 +21,16 @@
     <h3><a href="{% url note_list author.username %}">All Notes</a></h3>
     <h3>Recent Notes</h3>
     <ul>
-    {% for n in list_notes %}
-        <li class="note-item{% if n.pinned %} pinned{% endif %}{% ifequal n note %} selected{% endifequal %}"><a href="{{ n.get_absolute_url }}{% if request.GET.query %}?query={{request.GET.query}}{% endif %}">{{ n.title|safe }}</a></li>
-        {% endfor %}
-        {% if request.GET.query %}
-        <div style="text-align: center; margin: 3px;">
-            <a href="."><input type="button" value="{% trans "Clear Search" %}" style="width:90%;"></a>
-        </div>
+        {% for n in list_notes %}
+        {% if not n.pinned %}
+        <li class="note-item{% if n.pinned %} pinned{% endif %}{% ifequal n note %} note-selected{% endifequal %}"><a href="{{ n.get_absolute_url }}{% if request.GET.query %}?query={{request.GET.query}}{% endif %}">{{ n.title|safe }}</a></li>
         {% endif %}
+        {% endfor %}
+    {% if request.GET.query %}
+    <div style="text-align: center; margin: 3px;">
+        <a href="."><input type="button" value="{% trans "Clear Search" %}" style="width:90%;"></a>
+    </div>
+    {% endif %}
     </ul>
     <ul>
 {# Enable when we allow editing #}
@@ -39,6 +41,13 @@
 </div>
 <div id="sidebar-pinned-notes-list">
     <h3>{% trans "Pinned Notes" %}</h3>
+    <ul>
+        {% for n in list_notes %}
+        {% if n.pinned %}
+        <li class="note-item note-pinned{% ifequal n note %} note-selected{% endifequal %}"><a href="{{ n.get_absolute_url }}{% if request.GET.query %}?query={{request.GET.query}}{% endif %}">{{ n.title|safe }}</a></li>
+        {% endif %}
+        {% endfor %}
+    </ul>
 </div>
 
 <div id="sidebar-shared-notes-list">
@@ -57,7 +66,8 @@
 {% block content-header %}
 <div id="note-header">
     <button class="header-button">Share</button>
-    <button class="header-button" style="float:right;">Delete</button>
+    <button class="header-button">Delete</button>
+    <button class="header-button" style="float:right;">Edit</button>
 </div>
 {% endblock %}
 {% block content %}
