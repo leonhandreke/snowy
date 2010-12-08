@@ -33,6 +33,7 @@ from snowy.accounts.models import UserProfile
 from snowy.accounts.forms import InternationalizationForm, OpenIDRegistrationFormUniqueUser, EmailChangeForm
 
 from django_openid_auth import auth
+from django_openid_auth.forms import OpenIDLoginForm
 import django_openid_auth.views
 
 def openid_registration(request, template_name='registration/registration_form.html'):
@@ -104,7 +105,10 @@ def render_openid_failure(request, message, status=403, **kwargs):
         error_message = unicode(_("OpenID endpoint not found. Please check your OpenID."))
 
     messages.add_message(request, messages.ERROR, _("Error logging in: ") + error_message)
-    return HttpResponseRedirect(reverse('openid-login'))
+    return HttpResponseRedirect(reverse('auth_login'))
+
+def accounts_login(request, template_name='accounts/login.html', *args, **kwargs):
+    return openid_begin(request, template_name = template_name, *args, **kwargs)
 
 @login_required
 def accounts_preferences(request, template_name='accounts/preferences.html'):
