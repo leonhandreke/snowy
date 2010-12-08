@@ -3,7 +3,7 @@
     border: 1px solid black;
     /* In case the content does not fill up the container just blend in */
     vertical-align: top;
-    background-color: #ffffff;
+    background-color: #F2F2F2;
 }
 
 #content {

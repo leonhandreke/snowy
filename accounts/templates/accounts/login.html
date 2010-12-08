@@ -1,0 +1,72 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+{% block extra_head %}
+{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/accounts.css">
+<script type="text/javascript" src="{{ MEDIA_URL }}js/accounts/openid-config.js"></script>
+<script type="text/javascript">
+    // set the media URL to insert openid provider images in js
+    var MEDIA_URL = {{ MEDIA_URL }};
+</script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/accounts/login.js"></script>
+
+{% endblock %}
+
+{% block content %}
+
+{% if messages %}
+{% for message in messages %}
+<div{% if message.tags %} class="{{ message.tags }} center"{% endif %} style="color: red;">{{ message }}</div>
+<br />
+{% endfor %}
+{% endif %}
+<div id="login-container">
+    <h2>
+        {% if user.is_authenticated %}
+            {% trans "Add a New OpenID Identity to Your Account" %}
+        {% else %}
+        <h1>{% trans "Log in to" %} {{ site.name }}</h1>
+        {% endif %}
+    </h2>
+    <form method="post" id="auth-login-form" action="{% url registration_login %}">
+        <b>{{ auth_form.username.label_tag }}</b>
+        {{ auth_form.username }}
+        <br />
+        <b>{{ auth_form.password.label_tag }}</b>
+        {{ auth_form.password }}
+        <br />
+        <input type="submit" value="{% trans "Log in" %}">
+    </form>
+    <h2>...{% trans"or log in with" %}:</h2>
+    <div id="main-openid-provider-buttons">
+        {% comment %}Initially visible provider buttons are inserted here{% endcomment %}
+        <a id="openid-url-provider-button" href="#" class="openid-provider-button"><img src="{{ MEDIA_URL }}img/accounts/openid/openid.png" /></a>
+    </div>
+    {% comment %}Translators: "more..." in this context means "Show more providers"{% endcomment %}
+    <div id="more-providers"><a href="#">{% trans "more..." %}</a></div>
+    <div id="extra-openid-provider-buttons" style="display: none;">{% comment %}Extra provider buttons are inserted here{% endcomment %}</div>
+
+    <div id="openid-provider-username-form" style="display: none;">
+        <h3>
+            {% trans "Please supply your" %}
+            <span id="openid-username-provider-name"></span>
+            {% trans "username" %}
+        </h3>
+        <label for="openid-provider-username" id="before-username-field"></label>
+        <input id="openid-provider-username" type="text" placeholder="{% trans "username" %}" />
+        <label for="openid-provider-username" id="after-username-field"></label>
+        <input type="button" id="openid-provider-username-submit" value="{% trans "Log in" %}">
+    </div>
+
+    <br />
+    <form style="display: none" id="openid-login-form" name="fopenid" action="{% url openid-login %}" method="post">
+        <h3>{% trans "OpenID" %}</h3>
+        <b>{{ openid_form.openid_identifier.label_tag }}</b>
+        {{ openid_form.openid_identifier }}
+        <br />
+        <input name="bsignin" type="submit" value="{% trans "Log in with your OpenID" %}">
+        <br />
+        <div>{% trans "Don't have an OpenID yet? Get one " %}<a href="http://openid.net/get-an-openid/" alt="{% trans "Get an OpenID" %}">{% trans "here!" %}</a></div>
+    </form>
+{% endblock %}
