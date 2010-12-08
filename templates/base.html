@@ -16,6 +16,8 @@
     <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.min.js" charset="utf-8"></script>
     <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-ui.min.js" charset="utf-8"></script>
 {% endif %}
+    {% comment %}Smoothness theme for jQuery UI{% endcomment %}
+    <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/jquery-ui.css">
 {% block extra_head %}
 {% endblock %}
 </head>
@@ -36,7 +38,7 @@
                     </h3>
                     <p><a href="{% url preferences %}">{% trans "preferences" %}</a> / <a href="{% url django.contrib.auth.views.logout %}">{% trans "log out" %}</a></p>
                     {% else %}
-                    <p>{% trans "hello stranger! care to " %}<a href="{% url openid-login %}">{% trans "log in" %}</a>{% trans "?" %}</p>
+                    <p>{% trans "hello stranger! care to " %}<a href="{% url auth_login %}">{% trans "log in" %}</a>{% trans "?" %}</p>
                     <!--<p><small>{% trans "not a member yet?" %} <a href="{% url registration.views.register %}">{% trans "Sign up." %}</a></small></p>-->
                     {% endif %}
                 </td>
