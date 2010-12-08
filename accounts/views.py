@@ -18,7 +18,7 @@
 from django.utils.translation import ugettext_lazy as _
 
 from django.contrib.auth import get_backends
-from django.contrib.auth.forms import UserChangeForm, PasswordChangeForm
+from django.contrib.auth.forms import AuthenticationForm, UserChangeForm, PasswordChangeForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, REDIRECT_FIELD_NAME
 from django.contrib.auth.decorators import login_required
@@ -37,6 +37,8 @@ from snowy.accounts.forms import InternationalizationForm, OpenIDRegistrationFor
 from django_openid_auth import auth
 from django_openid_auth.auth import OpenIDBackend
 from django_openid_auth.models import UserOpenID
+from django_openid_auth.forms import OpenIDLoginForm
+
 import django_openid_auth.views
 
 def openid_registration(request, template_name='registration/registration_form.html'):
@@ -123,7 +125,18 @@ def render_openid_failure(request, message, status=403, **kwargs):
         error_message = unicode(_("OpenID endpoint not found. Please check your OpenID."))
 
     messages.add_message(request, messages.ERROR, _("Error logging in: ") + error_message)
-    return HttpResponseRedirect(reverse('openid-login'))
+    return HttpResponseRedirect(reverse('auth_login'))
+
+def accounts_login(request, template_name='accounts/login.html', *args, **kwargs):
+    # create both the OpenID and django.contrib.auth login form
+    openid_form = OpenIDLoginForm()
+    # change the label text to something nicer
+    openid_form.fields['openid_identifier'].label = _("OpenID")
+    auth_form = AuthenticationForm()
+    return render_to_response(template_name, {
+        'auth_form': auth_form,
+        'openid_form': openid_form },
+        context_instance=RequestContext(request))
 
 @login_required
 def accounts_preferences(request, template_name='accounts/preferences.html'):

@@ -1,0 +1,98 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+{% block extra_head %}
+{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/accounts.css">
+<script type="text/javascript" src="{{ MEDIA_URL }}js/accounts/openid-config.js"></script>
+<script type="text/javascript">
+    // set the media URL to insert openid provider images in js
+    var MEDIA_URL = {{ MEDIA_URL }};
+</script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/accounts/login.js"></script>
+
+{% endblock %}
+
+{% block content %}
+
+{% if messages %}
+{% for message in messages %}
+<div{% if message.tags %} class="{{ message.tags }} center"{% endif %} style="color: red;">{{ message }}</div>
+<br />
+{% endfor %}
+{% endif %}
+<div id="login-container">
+    <h2>
+        {% if user.is_authenticated %}
+            {% trans "Add a New OpenID Identity to Your Account" %}
+        {% else %}
+            <h1>Log in to {{ site.name }}</h1>
+        {% endif %}
+    </h2>
+    <form method="post" id="auth-login-form" action="{% url registration_login %}">
+        <b>{{ auth_form.username.label_tag }}</b>
+        {{ auth_form.username }}
+        <br />
+        <b>{{ auth_form.password.label_tag }}</b>
+        {{ auth_form.password }}
+        <br />
+        <input type="submit" value="{% trans "Log in" %}">
+    </form>
+    <h2>...or log in with:</h2>
+    <div id="main-openid-provider-buttons">
+        <a id="openid-url-provider-button" href="#" class="openid-provider-button"><img src="{{ MEDIA_URL }}img/accounts/openid/openid.png" /></a>
+    </div>
+    <div id="more-providers"><a href="#">more...</a></div>
+    <div id="extra-openid-provider-buttons" style="display: none;"></div>
+    <div id="openid-provider-username-form" style="display: none;">
+        <h3>
+            {% trans "Please supply your" %}
+            <span id="openid-username-provider-name"></span>
+            {% trans "username" %}
+        </h3>
+        <span id="before-username-field"></span>
+        <input id="openid-provider-username" type="text" placeholder="username" />
+        <span id="after-username-field"></span>
+        <input type="button" id="openid-provider-username-submit" value="Log in">
+    </div>
+
+    <br />
+    <form style="display: none" id="openid-login-form" name="fopenid" action="{% url openid-login %}" method="post">
+        <h3>OpenID</h3>
+        <b>{{ openid_form.openid_identifier.label_tag }}</b>
+        {{ openid_form.openid_identifier }}
+        <br />
+        <input name="bsignin" type="submit" value="{% trans "Log in with your OpenID" %}">
+        <br />
+    <div>{% trans "Don't have an OpenID yet? Get one " %}<a href="http://openid.net/get-an-openid/" alt="Get an OpenID">{% trans "here!" %}</a></div>
+    </form>
+    <!--
+<div id="login-rightcolumn">
+    <h3>{% trans "...or use one of the following services:" %}</h3>
+    <br />
+<form action="{{ action }}" method="post" id="openid_form">
+
+    <fieldset>
+            <legend>Sign-in or Create New Account</legend>
+            <div id="openid_choice">
+                <p>Please click your account provider:</p>
+                <div id="openid_btns"></div>
+            </div>
+            <div id="openid_input_area">
+                <input id="openid_identifier" name="openid_identifier" type="text" value="http://" />
+                <input id="openid_submit" type="submit" value="Sign-In"/>
+            </div>
+            <noscript>
+            <p>OpenID is service that allows you to log-on to many different websites using a single indentity.
+            Find out <a href="http://openid.net/what/">more about OpenID</a> and <a href="http://openid.net/get/">how to get an OpenID enabled account</a>.</p>
+            </noscript>
+            {% if next %}
+            <input type="hidden" name="next" value="{{ next }}" />
+            {% endif %}
+    </fieldset>
+</form>
+</div>
+-->
+<!-- the following div makes sure the float layout works correctly -->
+<!--<div style="clear: both;"></div>-->
+{% endblock %}

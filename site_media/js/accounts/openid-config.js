@@ -1,7 +1,7 @@
 /*
  Separated out into a different js file for ease of use by jschroeder
  */
-var providers_large = {
+var mainOpenIDProviders = {
     google: {
         name: 'Google',
         url: 'https://www.google.com/accounts/o8/id'
@@ -10,11 +10,14 @@ var providers_large = {
         name: 'Launchpad',
         label: 'Your Launchpad.net username.',
         url: 'https://launchpad.net/~{username}'
-    },
+    }};
+    /*
     yahoo: {
         name: 'Yahoo',
         url: 'http://yahoo.com/'
     },
+    */
+var extraOpenIDProviders = {
     aol: {
         name: 'AOL',
         label: 'Enter your AOL screenname.',
@@ -25,37 +28,30 @@ var providers_large = {
         label: 'Enter your MySpace username or email address.',
         url: 'http://{username}.myspace.com'
     },
-    /*
+             /*
     verisign: {
         name: 'Verisign',
         label: 'Your Verisign username',
         url: 'http://{username}.pip.verisignlabs.com/'
     },
-    openid: {
-        name: 'OpenID',     
-        label: 'Enter your OpenID.',
-        url: null
-    }
-    */
-};
-var providers_small = {
-    /*
+
     myopenid: {
         name: 'MyOpenID',
         label: 'Enter your MyOpenID username.',
         url: 'http://{username}.myopenid.com/'
     },
-    */
     livejournal: {
         name: 'LiveJournal',
         label: 'Enter your Livejournal username.',
         url: 'http://{username}.livejournal.com'
     },
+    */
     flickr: {
         name: 'Flickr',
         label: 'Enter your Flickr username.',
-        url: 'http://flickr.com/{username}/'
+        url: 'http://flickr.com/{username}'
     },
+            /*
     technorati: {
         name: 'Technorati',
         label: 'Enter your Technorati username.',
@@ -66,12 +62,12 @@ var providers_small = {
         label: 'Your Blogger account',
         url: 'http://{username}.blogspot.com/'
     },
+    */
     wordpress: {
         name: 'Wordpress',
         label: 'Enter your Wordpress.com username.',
         url: 'http://{username}.wordpress.com/'
     },
-
     /*
     vidoop: {
         name: 'Vidoop',

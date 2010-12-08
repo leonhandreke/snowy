@@ -5,19 +5,61 @@
     padding: 5px;
 }
 
-#login-leftcolumn {
-    border-right: 1px solid #000;
-    width: 45%;
-    display: block;
-    float: left;
-    margin-right: 10px;
+/* the sidebar is not needed for the account-related pages */
+#sidebar-container {
+    width: 0px !important;
 }
 
-#login-rightcolumn {
-    width: 45%;
+#content-container {
+    width: 50%;
+    margin-top: 3em;
     display: block;
-    float: left;
-    margin-left: 10px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#login-container {
+    text-align: center;
+}
+
+#login-container table {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#login-container label {
+    padding: 0.25em;
+}
+
+#login-container #id_username {
+    background: url('/site_media/img/accounts/users.png') no-repeat;
+    background-position: 95%;
+}
+
+#login-container #id_password {
+    background: url('/site_media/img/accounts/keyring.png') no-repeat;
+    background-position: 95%;
+}
+
+#login-container input {
+    padding: 1em;
+    margin: 0.8em;
+    border: 1px solid gray;
+    border-radius: 3px;
+}
+
+.openid-provider-button {
+    display: inline-block;
+    padding: 3px;
+    border: 1px solid gray;
+    border-radius: 2px;
+    margin: 3px;
+}
+
+.openid-provider-button img {
+    padding: 3px;
+    max-height: 32px;
 }
 
 .registration-form-label {
