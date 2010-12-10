@@ -108,7 +108,10 @@ def render_openid_failure(request, message, status=403, **kwargs):
     return HttpResponseRedirect(reverse('auth_login'))
 
 def accounts_login(request, template_name='accounts/login.html', *args, **kwargs):
-    return openid_begin(request, template_name = template_name, *args, **kwargs)
+    openid_login_form = OpenIDLoginForm()
+    return render_to_response(template_name, {
+        'openid_login_form': openid_login_form },
+        context_instance=RequestContext(request))
 
 @login_required
 def accounts_preferences(request, template_name='accounts/preferences.html'):

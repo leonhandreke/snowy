@@ -34,11 +34,13 @@ urlpatterns = patterns('',
     url(r'^logout/$', auth_views.logout, {'template_name': 'registration/logout.html'},
         name='auth_logout'),
 
-    url(r'^login/$', snowy.accounts.views.accounts_login, {'template_name': 'registration/login.html'},
+    url(r'^login/$', snowy.accounts.views.accounts_login, {'template_name': 'accounts/login.html'},
         name='auth_login'),
 
     # OpenID URLs
     # names must not be altered because django_openid_auth has to reverse them
+    url(r'^openid/login/$', snowy.accounts.views.openid_begin,
+        {'template_name': 'accounts/login.html'}, name='openid-login'),
     url(r'^openid/complete/$', snowy.accounts.views.openid_complete,
         name='openid-complete'),
     url(r'^openid/registration/$', snowy.accounts.views.openid_registration,

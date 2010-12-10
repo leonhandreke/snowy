@@ -25,14 +25,14 @@
 {% endfor %}
 {% endif %}
 
-<div id="login-leftcolumn">
+<div id="login-container">
     <h3>{% trans "Log in with your OpenID" %}</h3>
 
-    <form name="fopenid" action="{{ action }}" method="post">
+    <form name="fopenid" action="{% url openid-login %}" method="post">
         <table>
             <tr>
                 <td style="width: 100px;"><b>{% trans "OpenID:"%}</b></td>
-                <td>{{ form.openid_identifier }}</td>
+                <td>{{ openid_login_form.openid_identifier }}</td>
             </tr>
         </table>
         <input name="bsignin" type="submit" value="{% trans "Log in with your OpenID" %}">
@@ -43,13 +43,11 @@
     <br />
     <div>{% trans "Don't have an OpenID yet? Get one " %}<a href="http://openid.net/get-an-openid/" alt="Get an OpenID">{% trans "here!" %}</a></div>
 </div>
-
+<!--
 <div id="login-rightcolumn">
     <h3>{% trans "...or use one of the following services:" %}</h3>
     <br />
-<!-- Simple OpenID Selector -->
 <form action="{{ action }}" method="post" id="openid_form">
-    <!--<input type="hidden" name="action" value="verify" />-->
 
     <fieldset>
             <legend>Sign-in or Create New Account</legend>
@@ -71,7 +69,7 @@
     </fieldset>
 </form>
 </div>
-
+-->
 <!-- the following div makes sure the float layout works correctly -->
 <div style="clear: both;"></div>
 
