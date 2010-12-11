@@ -20,6 +20,18 @@
 #login-container {
     text-align: center;
 }
+#login-container table {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#login-container label {
+    padding: 0.25em;
+}
+#login-container input {
+    padding: 0.25em;
+}
 
 .registration-form-label {
     width: 15em;

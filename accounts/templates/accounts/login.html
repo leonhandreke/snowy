@@ -26,6 +26,20 @@
 {% endif %}
 
 <div id="login-container">
+    <h2>Log in</h2>
+    <form method="post" action="{% url auth_login %}">
+        <table>
+            <tr>
+                <td><b>{{ auth_form.username.label_tag }}:</b></td>
+                <td>{{ auth_form.username }}</td>
+            </tr>
+            <tr>
+                <td><b>{{ auth_form.password.label_tag }}:</b></td>
+                <td>{{ auth_form.password }}</td>
+            </tr>
+        </table>
+    </form>
+    <!--
     <h3>{% trans "Log in with your OpenID" %}</h3>
 
     <form name="fopenid" action="{% url openid-login %}" method="post">
@@ -40,6 +54,7 @@
     <br />
     <div>{% trans "Don't have an OpenID yet? Get one " %}<a href="http://openid.net/get-an-openid/" alt="Get an OpenID">{% trans "here!" %}</a></div>
 </div>
+-->
 <!--
 <div id="login-rightcolumn">
     <h3>{% trans "...or use one of the following services:" %}</h3>
@@ -68,9 +83,5 @@
 </div>
 -->
 <!-- the following div makes sure the float layout works correctly -->
-<div style="clear: both;"></div>
-
-<br />
-<hr>
-<div style="display: block;"><small>{% trans "...or " %} <a href="{% url auth_login %}">{% trans "log in the old way" %}</a>{% trans "." %}</small></div>
+<!--<div style="clear: both;"></div>-->
 {% endblock %}

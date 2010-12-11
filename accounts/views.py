@@ -17,7 +17,7 @@
 
 from django.utils.translation import ugettext_lazy as _
 
-from django.contrib.auth.forms import UserChangeForm, PasswordChangeForm
+from django.contrib.auth.forms import AuthenticationForm, UserChangeForm, PasswordChangeForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
@@ -108,8 +108,11 @@ def render_openid_failure(request, message, status=403, **kwargs):
     return HttpResponseRedirect(reverse('auth_login'))
 
 def accounts_login(request, template_name='accounts/login.html', *args, **kwargs):
+    # create both the OpenID and django.contrib.auth login form
     openid_login_form = OpenIDLoginForm()
+    auth_form = AuthenticationForm()
     return render_to_response(template_name, {
+        'auth_form': auth_form,
         'openid_login_form': openid_login_form },
         context_instance=RequestContext(request))
 
