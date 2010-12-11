@@ -5,7 +5,7 @@
 {{ block.super }}
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/accounts.css">
 <link rel="stylesheet" href="{{ MEDIA_URL }}css/openid.css" />
-<script type="text/javascript" src="{{ MEDIA_URL }}js/config.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/openid-jquery-config.js"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/openid-jquery.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
@@ -26,7 +26,6 @@
 {% endif %}
 
 <div id="login-container">
-    <h2>Log in</h2>
     <form method="post" action="{% url auth_login %}">
         <table>
             <tr>
@@ -38,13 +37,23 @@
                 <td>{{ auth_form.password }}</td>
             </tr>
         </table>
+        <input type="submit" value="{% trans "Log in" %}">
     </form>
-    <!--
+    <h3>OpenID</h3>
+    <form name="fopenid" action="{% url openid-login %}" method="post">
+        <b>{{ openid_form.openid_identifier.label_tag }}:</b>
+        {{ openid_form.openid_identifier }}
+        <br />
+        <input name="bsignin" type="submit" value="{% trans "Log in with your OpenID" %}">
+    </form>
+    <br />
+    <div>{% trans "Don't have an OpenID yet? Get one " %}<a href="http://openid.net/get-an-openid/" alt="Get an OpenID">{% trans "here!" %}</a></div>
+<!--
     <h3>{% trans "Log in with your OpenID" %}</h3>
 
     <form name="fopenid" action="{% url openid-login %}" method="post">
         <b><label for="openid_identifier">{% trans "OpenID:"%}</label></b>
-        {{ openid_login_form.openid_identifier }}
+        {{ openid_form.openid_identifier }}
         <br />
         <input name="bsignin" type="submit" value="{% trans "Log in with your OpenID" %}">
         {% if next %}

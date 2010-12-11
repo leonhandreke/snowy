@@ -109,11 +109,13 @@ def render_openid_failure(request, message, status=403, **kwargs):
 
 def accounts_login(request, template_name='accounts/login.html', *args, **kwargs):
     # create both the OpenID and django.contrib.auth login form
-    openid_login_form = OpenIDLoginForm()
+    openid_form = OpenIDLoginForm()
+    # change the label text to something nicer
+    openid_form.fields['openid_identifier'].label = _("OpenID")
     auth_form = AuthenticationForm()
     return render_to_response(template_name, {
         'auth_form': auth_form,
-        'openid_login_form': openid_login_form },
+        'openid_form': openid_form },
         context_instance=RequestContext(request))
 
 @login_required
