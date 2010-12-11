@@ -8,9 +8,25 @@
 <script type="text/javascript" src="{{ MEDIA_URL }}js/openid-jquery-config.js"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/openid-jquery.js"></script>
 <script type="text/javascript">
+    function browserSupportsInputPlaceholder() {
+        var i = document.createElement('input');
+        return 'placeholder' in i;
+    }
     $(document).ready(function() {
-        openid.img_path = '{{ MEDIA_URL }}img/accounts/openid/';
-        openid.init('openid_identifier');
+            /* use CSS3 placeholder but make sure users with unsupported
+             * browsers at least see the labels */
+            if (browserSupportsInputPlaceholder()) {
+                // loop over each label with jQuery
+                $.each($("label"), function(i, element) {
+                    // extract the label valuefrom the label
+                    var for_input = $(element).attr('for');
+                    var text = $(element).text();
+                    // insert the placeholder into the corresponding input
+                    $("#" + for_input).attr('placeholder', text);
+                    // hide the label it's not needed anymore
+                    $(element).hide();
+                });
+            }
     });
 </script>
 
@@ -27,21 +43,18 @@
 
 <div id="login-container">
     <form method="post" action="{% url auth_login %}">
-        <table>
-            <tr>
-                <td><b>{{ auth_form.username.label_tag }}:</b></td>
-                <td>{{ auth_form.username }}</td>
-            </tr>
-            <tr>
-                <td><b>{{ auth_form.password.label_tag }}:</b></td>
-                <td>{{ auth_form.password }}</td>
-            </tr>
-        </table>
+        <b>{{ auth_form.username.label_tag }}</b>
+        {{ auth_form.username }}
+        <br />
+        <b>{{ auth_form.password.label_tag }}</b>
+        {{ auth_form.password }}
+        <br />
         <input type="submit" value="{% trans "Log in" %}">
     </form>
+
     <h3>OpenID</h3>
     <form name="fopenid" action="{% url openid-login %}" method="post">
-        <b>{{ openid_form.openid_identifier.label_tag }}:</b>
+        <b>{{ openid_form.openid_identifier.label_tag }}</b>
         {{ openid_form.openid_identifier }}
         <br />
         <input name="bsignin" type="submit" value="{% trans "Log in with your OpenID" %}">
