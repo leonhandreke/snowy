@@ -29,12 +29,9 @@
     <h3>{% trans "Log in with your OpenID" %}</h3>
 
     <form name="fopenid" action="{% url openid-login %}" method="post">
-        <table>
-            <tr>
-                <td style="width: 100px;"><b>{% trans "OpenID:"%}</b></td>
-                <td>{{ openid_login_form.openid_identifier }}</td>
-            </tr>
-        </table>
+        <b><label for="openid_identifier">{% trans "OpenID:"%}</label></b>
+        {{ openid_login_form.openid_identifier }}
+        <br />
         <input name="bsignin" type="submit" value="{% trans "Log in with your OpenID" %}">
         {% if next %}
         <input type="hidden" name="next" value="{{ next }}" />
