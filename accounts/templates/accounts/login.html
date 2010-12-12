@@ -51,6 +51,18 @@
         <br />
         <input type="submit" value="{% trans "Log in" %}">
     </form>
+    <h2>...or log in with:</h2>
+    <div id="openid-selector">
+        <div class="openid-selector-button">
+            <img src="{{MEDIA_URL}}img/accounts/openid/google.gif" />
+        </div>
+        <div class="openid-selector-button">
+            <img src="{{MEDIA_URL}}img/accounts/openid/launchpad.gif" />
+        </div>
+        <div class="openid-selector-button">
+            <img src="{{MEDIA_URL}}img/accounts/openid/wordpress.png" />
+        </div>
+    </div>
 
     <h3>OpenID</h3>
     <form name="fopenid" action="{% url openid-login %}" method="post">
@@ -61,22 +73,6 @@
     </form>
     <br />
     <div>{% trans "Don't have an OpenID yet? Get one " %}<a href="http://openid.net/get-an-openid/" alt="Get an OpenID">{% trans "here!" %}</a></div>
-<!--
-    <h3>{% trans "Log in with your OpenID" %}</h3>
-
-    <form name="fopenid" action="{% url openid-login %}" method="post">
-        <b><label for="openid_identifier">{% trans "OpenID:"%}</label></b>
-        {{ openid_form.openid_identifier }}
-        <br />
-        <input name="bsignin" type="submit" value="{% trans "Log in with your OpenID" %}">
-        {% if next %}
-        <input type="hidden" name="next" value="{{ next }}" />
-        {% endif %}
-    </form>
-    <br />
-    <div>{% trans "Don't have an OpenID yet? Get one " %}<a href="http://openid.net/get-an-openid/" alt="Get an OpenID">{% trans "here!" %}</a></div>
-</div>
--->
 <!--
 <div id="login-rightcolumn">
     <h3>{% trans "...or use one of the following services:" %}</h3>
