@@ -12,6 +12,18 @@
         var i = document.createElement('input');
         return 'placeholder' in i;
     }
+
+    function openIDProviderButtonClicked(providerName) {
+        var provider = openIDProviders[providerName];
+        if (provider.url.indexOf("{username}") != -1) {
+            var urlComponents = provider.url.split("{username}")
+            $('#openid-username-provider-name').text(provider.name);
+            $('#before-username-field').text(urlComponents[0]);
+            $('#after-username-field').text(urlComponents[1]);
+            $('#openid-provider-username-section').show();
+        }
+    }
+
     $(document).ready(function() {
             /* use CSS3 placeholder but make sure users with unsupported
              * browsers at least see the labels */
@@ -42,7 +54,7 @@
 {% endif %}
 
 <div id="login-container">
-    <form method="post" action="{% url auth_login %}">
+    <form method="post" id="auth-login-form" action="{% url auth_login %}">
         <b>{{ auth_form.username.label_tag }}</b>
         {{ auth_form.username }}
         <br />
@@ -52,16 +64,26 @@
         <input type="submit" value="{% trans "Log in" %}">
     </form>
     <h2>...or log in with:</h2>
-    <div id="openid-selector">
-        <div class="openid-selector-button">
+    <div id="openid-provider-buttons">
+        <div class="openid-provider-button" onClick="openIDProviderButtonClicked('google')">
             <img src="{{MEDIA_URL}}img/accounts/openid/google.gif" />
         </div>
-        <div class="openid-selector-button">
+        <div class="openid-provider-button" onClick="openIDProviderButtonClicked('launchpad')">
             <img src="{{MEDIA_URL}}img/accounts/openid/launchpad.gif" />
         </div>
-        <div class="openid-selector-button">
+        <div class="openid-provider-button" onClick="openIDProviderButtonClicked('wordpress')">
             <img src="{{MEDIA_URL}}img/accounts/openid/wordpress.png" />
         </div>
+    </div>
+    <div id="openid-provider-username-section" style="display: none">
+        <h3>
+            {% trans "Please supply your" %}
+            <span id="openid-username-provider-name"></span>
+            {% trans "username" %}
+        </h3>
+        <span id="before-username-field"></span>
+        <input type="text" placeholder="username" />
+        <span id="after-username-field"></span>
     </div>
 
     <h3>OpenID</h3>
