@@ -21,7 +21,7 @@
 {% endif %}
 
 <div id="login-container">
-    <form method="post" id="auth-login-form" action="{% url auth_login %}">
+    <form method="post" id="auth-login-form" action="{% url registration_login %}">
         <b>{{ auth_form.username.label_tag }}</b>
         {{ auth_form.username }}
         <br />
@@ -54,16 +54,19 @@
         <input type="button" value="Log in" onClick="submitProviderUsernameForm()">
     </div>
 
-    <h3>OpenID</h3>
-    <form id="openid-login-form" name="fopenid" action="{% url openid-login %}" method="post">
+    <br />
+    <a id="more-openid-options" href="#" onClick="showMoreOpenIDOptions()">{% trans "More OpenID options..." %}</a>
+
+    <form style="display: none" id="openid-login-form" name="fopenid" action="{% url openid-login %}" method="post">
+        <h3>OpenID</h3>
         <b>{{ openid_form.openid_identifier.label_tag }}</b>
         {{ openid_form.openid_identifier }}
         <br />
         <input name="bsignin" type="submit" value="{% trans "Log in with your OpenID" %}">
-    </form>
-    <br />
+        <br />
     <div>{% trans "Don't have an OpenID yet? Get one " %}<a href="http://openid.net/get-an-openid/" alt="Get an OpenID">{% trans "here!" %}</a></div>
-<!--
+    </form>
+    <!--
 <div id="login-rightcolumn">
     <h3>{% trans "...or use one of the following services:" %}</h3>
     <br />

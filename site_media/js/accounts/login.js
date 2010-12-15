@@ -38,6 +38,12 @@ function submitProviderUsernameForm() {
     submitOpenIDLoginForm(openIDURL);
 }
 
+function showMoreOpenIDOptions() {
+    $("#openid-login-form").show();
+    // fade the user/pass login form out a bit to focus on openID
+    $("#auth-login-form").fadeTo(0.5, 0.5);
+}
+
 $(document).ready(function() {
     /* use CSS3 placeholder but make sure users with unsupported
      * browsers at least see the labels */
