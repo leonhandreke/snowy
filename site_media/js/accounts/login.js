@@ -40,8 +40,22 @@ function submitProviderUsernameForm() {
 
 function showMoreOpenIDOptions() {
     $("#openid-login-form").show();
+    $("#more-openid-options").hide();
     // fade the user/pass login form out a bit to focus on openID
     $("#auth-login-form").fadeTo(0.5, 0.5);
+}
+
+function openIDProviderButton(providerName) {
+    provider = providerName.toLowerCase();
+    return $('<div class="openid-provider-button" \
+        onClick="openIDProviderButtonClicked(\'' + provider + '\')"> \
+        <img src="' + MEDIA_URL + 'img/accounts/openid/' + provider + '.gif" /></div>');
+}
+
+function insertOpenIDProviderButtons() {
+    for (var provider in openIDProviders) {
+        $("#openid-provider-buttons").append(openIDProviderButton(provider));
+    }
 }
 
 $(document).ready(function() {
@@ -59,5 +73,6 @@ $(document).ready(function() {
             $(element).hide();
         });
     }
+    insertOpenIDProviderButtons();
 });
 

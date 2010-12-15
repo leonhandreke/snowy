@@ -7,6 +7,10 @@
 <link rel="stylesheet" href="{{ MEDIA_URL }}css/openid.css" />
 <script type="text/javascript" src="{{ MEDIA_URL }}js/openid-jquery-config.js"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/openid-jquery.js"></script>
+<script type="text/javascript">
+    // set the media URL to insert openid provider images in js
+    var MEDIA_URL = {{ MEDIA_URL }};
+</script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/accounts/login.js"></script>
 
 {% endblock %}
@@ -32,15 +36,6 @@
     </form>
     <h2>...or log in with:</h2>
     <div id="openid-provider-buttons">
-        <div class="openid-provider-button" onClick="openIDProviderButtonClicked('google')">
-            <img src="{{MEDIA_URL}}img/accounts/openid/google.gif" />
-        </div>
-        <div class="openid-provider-button" onClick="openIDProviderButtonClicked('launchpad')">
-            <img src="{{MEDIA_URL}}img/accounts/openid/launchpad.gif" />
-        </div>
-        <div class="openid-provider-button" onClick="openIDProviderButtonClicked('wordpress')">
-            <img src="{{MEDIA_URL}}img/accounts/openid/wordpress.png" />
-        </div>
     </div>
     <div id="openid-provider-username-section" style="display: none">
         <h3>
