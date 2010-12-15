@@ -36,7 +36,7 @@
     border: 2px solid gray;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
-    border-radius: 5px;
+    border-radius: 3px;
 }
 
 .openid-provider-button {
