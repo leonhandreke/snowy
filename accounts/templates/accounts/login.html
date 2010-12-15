@@ -49,8 +49,9 @@
             {% trans "username" %}
         </h3>
         <span id="before-username-field"></span>
-        <input type="text" placeholder="username" />
+        <input id="openid-provider-username" type="text" placeholder="username" />
         <span id="after-username-field"></span>
+        <input type="button" value="Log in" onClick="submitProviderUsernameForm()">
     </div>
 
     <h3>OpenID</h3>

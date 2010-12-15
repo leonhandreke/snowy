@@ -13,21 +13,29 @@ function openIDProviderButtonClicked(providerName) {
         $('#before-username-field').text(urlComponents[0]);
         $('#after-username-field').text(urlComponents[1]);
         $('#openid-provider-username-section').show();
+        // fade the user/pass login form out a bit to focus on openID
+        $("#auth-login-form").fadeTo(0.5, 0.5);
     }
     else {
         // this provider has one URL for all users
-        submitOpenIDForm(provider.url);
+        submitOpenIDLoginForm(provider.url);
     }
 }
 
-function submitOpenIDForm(openIDURL) {
+function submitOpenIDLoginForm(openIDURL) {
     // if an openIDURL was given, submit the form with that URL
-    console.log(openIDURL);
     if (openIDURL) {
         $("#id_openid_identifier").val(openIDURL);
     }
     // submit the form
     $("#openid-login-form").submit();
+}
+
+function submitProviderUsernameForm() {
+    var openIDURL = $("#before-username-field").text()
+                   + $("#openid-provider-username").val()
+                   + $("#after-username-field").text();
+    submitOpenIDLoginForm(openIDURL);
 }
 
 $(document).ready(function() {
