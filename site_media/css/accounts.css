@@ -44,6 +44,7 @@
     padding: 3px;
     border: 1px solid gray;
     border-radius: 2px;
+    margin: 3px;
 }
 
 .openid-provider-button img {

@@ -49,7 +49,7 @@ function openIDProviderButton(providerName) {
     provider = providerName.toLowerCase();
     return $('<div class="openid-provider-button" \
         onClick="openIDProviderButtonClicked(\'' + provider + '\')"> \
-        <img src="' + MEDIA_URL + 'img/accounts/openid/' + provider + '.gif" /></div>');
+        <img src="' + MEDIA_URL + 'img/accounts/openid/' + provider + '.png" /></div>');
 }
 
 function insertOpenIDProviderButtons() {

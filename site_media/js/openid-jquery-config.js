@@ -11,6 +11,7 @@ var openIDProviders = {
         label: 'Your Launchpad.net username.',
         url: 'https://launchpad.net/~{username}'
     },
+    /*
     yahoo: {
         name: 'Yahoo',
         url: 'http://yahoo.com/'
@@ -25,7 +26,6 @@ var openIDProviders = {
         label: 'Enter your MySpace username or email address.',
         url: 'http://{username}.myspace.com'
     },
-    /*
     verisign: {
         name: 'Verisign',
         label: 'Your Verisign username',
@@ -36,14 +36,12 @@ var openIDProviders = {
         label: 'Enter your OpenID.',
         url: null
     }
-    */
-    /*
+
     myopenid: {
         name: 'MyOpenID',
         label: 'Enter your MyOpenID username.',
         url: 'http://{username}.myopenid.com/'
     },
-    */
     livejournal: {
         name: 'LiveJournal',
         label: 'Enter your Livejournal username.',
@@ -64,12 +62,12 @@ var openIDProviders = {
         label: 'Your Blogger account',
         url: 'http://{username}.blogspot.com/'
     },
+    */
     wordpress: {
         name: 'Wordpress',
         label: 'Enter your Wordpress.com username.',
         url: 'http://{username}.wordpress.com/'
     },
-
     /*
     vidoop: {
         name: 'Vidoop',
