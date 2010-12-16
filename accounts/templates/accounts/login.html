@@ -23,6 +23,7 @@
 {% endif %}
 
 <div id="login-container">
+    <h1>Log in to {{ site.name }}</h1>
     <form method="post" id="auth-login-form" action="{% url registration_login %}">
         <b>{{ auth_form.username.label_tag }}</b>
         {{ auth_form.username }}
