@@ -35,6 +35,7 @@ function insertOpenIDProviderButtons() {
         $("#extra-openid-provider-buttons").prepend(openIDProviderButton(provider));
     }
     $(".openid-provider-button").bind('click', function () {
+        var openIDProviders = jQuery.extend(mainOpenIDProviders, extraOpenIDProviders);
         var provider = openIDProviders[$(this).attr('provider')];
         if (provider != undefined) {
             if (provider.url.indexOf("{username}") != -1) {
