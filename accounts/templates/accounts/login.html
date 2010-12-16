@@ -35,6 +35,7 @@
     </form>
     <h2>...or log in with:</h2>
     <div id="openid-provider-buttons">
+        <a id="openid-url-provider-button" href="#" class="openid-provider-button"><img src="{{ MEDIA_URL }}img/accounts/openid/openid.png" /></a>
     </div>
     <div id="openid-provider-username-section" style="display: none">
         <h3>
@@ -49,7 +50,6 @@
     </div>
 
     <br />
-    <a id="more-openid-options" href="#" onClick="showMoreOpenIDOptions()">{% trans "More OpenID options..." %}</a>
 
     <form style="display: none" id="openid-login-form" name="fopenid" action="{% url openid-login %}" method="post">
         <h3>OpenID</h3>

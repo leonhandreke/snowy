@@ -24,8 +24,7 @@ function showMoreOpenIDOptions() {
 function openIDProviderButton(providerName) {
     provider = providerName.toLowerCase();
     return $('<a href="#" class="openid-provider-button" provider="' + provider + '">\
-        <img src="' + MEDIA_URL + 'img/accounts/openid/' + provider + '.png" /></a>')
-        //.bind('click', openIDProviderButtonClicked);
+        <img src="' + MEDIA_URL + 'img/accounts/openid/' + provider + '.png" /></a>');
 }
 
 function insertOpenIDProviderButtons() {
@@ -34,18 +33,20 @@ function insertOpenIDProviderButtons() {
     }
     $(".openid-provider-button").bind('click', function () {
         var provider = openIDProviders[$(this).attr('provider')];
-        if (provider.url.indexOf("{username}") != -1) {
-            var urlComponents = provider.url.split("{username}");
-            $('#openid-username-provider-name').text(provider.name);
-            $('#before-username-field').text(urlComponents[0]);
-            $('#after-username-field').text(urlComponents[1]);
-            $('#openid-provider-username-section').show();
-            // fade the user/pass login form out a bit to focus on openID
-            $("#auth-login-form").fadeTo(0.5, 0.5);
-        }
-        else {
-            // this provider has one URL for all users
-            submitOpenIDLoginForm(provider.url);
+        if (provider != undefined) {
+            if (provider.url.indexOf("{username}") != -1) {
+                var urlComponents = provider.url.split("{username}");
+                $('#openid-username-provider-name').text(provider.name);
+                $('#before-username-field').text(urlComponents[0]);
+                $('#after-username-field').text(urlComponents[1]);
+                $('#openid-provider-username-section').show();
+                // fade the user/pass login form out a bit to focus on openID
+                $("#auth-login-form").fadeTo(0.5, 0.5);
+            }
+            else {
+                // this provider has one URL for all users
+                submitOpenIDLoginForm(provider.url);
+            }
         }
     });
 }
@@ -72,8 +73,8 @@ $(document).ready(function() {
         var openIDURL = $("#before-username-field").text()
         + $("#openid-provider-username").val()
         + $("#after-username-field").text();
-    submitOpenIDLoginForm(openIDURL);
-    });
+        submitOpenIDLoginForm(openIDURL);
+        });
     // simulate a log in button press when pressing enter in the username field
     $("#openid-provider-username").bind('keypress', function(e) {
         var code = (e.keyCode ? e.keyCode : e.which);
@@ -81,6 +82,12 @@ $(document).ready(function() {
             // simulate a log in button press
             $("#openid-provider-username-submit").trigger('click');
         }
+    });
+    $("#openid-url-provider-button").bind('click', function () {
+        $("#openid-login-form").show();
+        $("#id_openid_identifier").focus();
+        // fade the user/pass login form out a bit to focus on openID
+        $("#auth-login-form").fadeTo(0.5, 0.5);
     });
 });
 

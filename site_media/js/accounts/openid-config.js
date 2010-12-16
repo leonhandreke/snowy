@@ -16,6 +16,7 @@ var openIDProviders = {
         name: 'Yahoo',
         url: 'http://yahoo.com/'
     },
+    */
     aol: {
         name: 'AOL',
         label: 'Enter your AOL screenname.',
@@ -26,16 +27,12 @@ var openIDProviders = {
         label: 'Enter your MySpace username or email address.',
         url: 'http://{username}.myspace.com'
     },
+             /*
     verisign: {
         name: 'Verisign',
         label: 'Your Verisign username',
         url: 'http://{username}.pip.verisignlabs.com/'
     },
-    openid: {
-        name: 'OpenID',     
-        label: 'Enter your OpenID.',
-        url: null
-    }
 
     myopenid: {
         name: 'MyOpenID',
@@ -47,11 +44,13 @@ var openIDProviders = {
         label: 'Enter your Livejournal username.',
         url: 'http://{username}.livejournal.com'
     },
+    */
     flickr: {
         name: 'Flickr',
         label: 'Enter your Flickr username.',
-        url: 'http://flickr.com/{username}/'
+        url: 'http://flickr.com/{username}'
     },
+            /*
     technorati: {
         name: 'Technorati',
         label: 'Enter your Technorati username.',
