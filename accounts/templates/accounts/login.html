@@ -34,10 +34,12 @@
         <input type="submit" value="{% trans "Log in" %}">
     </form>
     <h2>...or log in with:</h2>
-    <div id="openid-provider-buttons">
+    <div id="main-openid-provider-buttons">
         <a id="openid-url-provider-button" href="#" class="openid-provider-button"><img src="{{ MEDIA_URL }}img/accounts/openid/openid.png" /></a>
     </div>
-    <div id="openid-provider-username-section" style="display: none">
+    <div id="more-providers"><a href="#">more...</a></div>
+    <div id="extra-openid-provider-buttons" style="display: none;"></div>
+    <div id="openid-provider-username-section" style="display: none;">
         <h3>
             {% trans "Please supply your" %}
             <span id="openid-username-provider-name"></span>

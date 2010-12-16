@@ -28,8 +28,11 @@ function openIDProviderButton(providerName) {
 }
 
 function insertOpenIDProviderButtons() {
-    for (var provider in openIDProviders) {
-        $("#openid-provider-buttons").append(openIDProviderButton(provider));
+    for (var provider in mainOpenIDProviders) {
+        $("#main-openid-provider-buttons").prepend(openIDProviderButton(provider));
+    }
+    for (var provider in extraOpenIDProviders) {
+        $("#extra-openid-provider-buttons").prepend(openIDProviderButton(provider));
     }
     $(".openid-provider-button").bind('click', function () {
         var provider = openIDProviders[$(this).attr('provider')];
@@ -66,15 +69,18 @@ $(document).ready(function() {
             $(element).hide();
         });
     }
+
+    // generate the provider buttons from the config file
     insertOpenIDProviderButtons();
 
-    // bind the openid provider username form events
+    // bind the log in button in the openID username input "form"
     $("#openid-provider-username-submit").bind('click', function() {
         var openIDURL = $("#before-username-field").text()
         + $("#openid-provider-username").val()
         + $("#after-username-field").text();
         submitOpenIDLoginForm(openIDURL);
         });
+
     // simulate a log in button press when pressing enter in the username field
     $("#openid-provider-username").bind('keypress', function(e) {
         var code = (e.keyCode ? e.keyCode : e.which);
@@ -83,11 +89,18 @@ $(document).ready(function() {
             $("#openid-provider-username-submit").trigger('click');
         }
     });
+
+    // bind the pure OpenID URL button
     $("#openid-url-provider-button").bind('click', function () {
         $("#openid-login-form").show();
         $("#id_openid_identifier").focus();
         // fade the user/pass login form out a bit to focus on openID
         $("#auth-login-form").fadeTo(0.5, 0.5);
+    });
+    // bind the "more..." button
+    $("#more-providers").bind('click', function () {
+        $("#extra-openid-provider-buttons").show();
+        $("#more-providers").hide();
     });
 });
 

@@ -1,7 +1,7 @@
 /*
  Separated out into a different js file for ease of use by jschroeder
  */
-var openIDProviders = {
+var mainOpenIDProviders = {
     google: {
         name: 'Google',
         url: 'https://www.google.com/accounts/o8/id'
@@ -10,13 +10,14 @@ var openIDProviders = {
         name: 'Launchpad',
         label: 'Your Launchpad.net username.',
         url: 'https://launchpad.net/~{username}'
-    },
+    }};
     /*
     yahoo: {
         name: 'Yahoo',
         url: 'http://yahoo.com/'
     },
     */
+var extraOpenIDProviders = {
     aol: {
         name: 'AOL',
         label: 'Enter your AOL screenname.',
