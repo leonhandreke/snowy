@@ -32,12 +32,12 @@
     padding: 0.25em;
 }
 
-#id_username {
+#login-container #id_username {
     background: url('/site_media/img/accounts/system-users.png') no-repeat;
     background-position: 95%;
 }
 
-#id_password {
+#login-container #id_password {
     background: url('/site_media/img/accounts/seahorse.png') no-repeat;
     background-position: 95%;
 }
