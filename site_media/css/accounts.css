@@ -33,12 +33,12 @@
 }
 
 #login-container #id_username {
-    background: url('/site_media/img/accounts/system-users.png') no-repeat;
+    background: url('/site_media/img/accounts/users.png') no-repeat;
     background-position: 95%;
 }
 
 #login-container #id_password {
-    background: url('/site_media/img/accounts/seahorse.png') no-repeat;
+    background: url('/site_media/img/accounts/keyring.png') no-repeat;
     background-position: 95%;
 }
 
