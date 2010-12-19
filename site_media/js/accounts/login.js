@@ -1,10 +1,5 @@
 /* javascript for the login page */
 /* created because the inline javascript became too messy */
-function browserSupportsInputPlaceholder() {
-    var i = document.createElement('input');
-    return 'placeholder' in i;
-}
-
 function submitOpenIDLoginForm(openIDURL) {
     // if an openIDURL was given, submit the form with that URL
     if (openIDURL) {
@@ -18,19 +13,19 @@ function submitOpenIDLoginForm(openIDURL) {
 function insertOpenIDProviderButtons() {
     var openIDProviderButton = function (providerName) {
         provider = providerName.toLowerCase();
-        return $('<a href="#" class="openid-provider-button" provider="' + provider + '">\
-                <img src="' + MEDIA_URL + 'img/accounts/openid/' + provider + '.png" /></a>');
+        return $('<a href="#" class="openid-provider-button" provider="' + provider +
+			'"><img src="' + MEDIA_URL + 'img/accounts/openid/' + provider + '.png" /></a>');
     };
-    for (var provider in mainOpenIDProviders) {
-        $("#main-openid-provider-buttons").prepend(openIDProviderButton(provider));
+    for (var mainProvider in mainOpenIDProviders) {
+        $("#main-openid-provider-buttons").prepend(openIDProviderButton(mainProvider));
     }
-    for (var provider in extraOpenIDProviders) {
-        $("#extra-openid-provider-buttons").prepend(openIDProviderButton(provider));
+    for (var extraProvider in extraOpenIDProviders) {
+        $("#extra-openid-provider-buttons").prepend(openIDProviderButton(extraProvider));
     }
     $(".openid-provider-button").bind('click', function () {
         var openIDProviders = jQuery.extend(mainOpenIDProviders, extraOpenIDProviders);
         var provider = openIDProviders[$(this).attr('provider')];
-        if (provider != undefined) {
+        if (provider !== undefined) {
             if (provider.url.indexOf("{username}") != -1) {
                 // split the url and put it before/after the username field
                 var urlComponents = provider.url.split("{username}");
@@ -57,6 +52,10 @@ function insertOpenIDProviderButtons() {
 $(document).ready(function() {
     /* use CSS3 placeholder but make sure users with unsupported
      * browsers at least see the labels */
+    var browserSupportsInputPlaceholder = function () {
+        var i = document.createElement('input');
+        return 'placeholder' in i;
+    };
     if (browserSupportsInputPlaceholder()) {
         // loop over each label with jQuery
         $.each($("label"), function(i, element) {
@@ -75,9 +74,9 @@ $(document).ready(function() {
 
     // bind the log in button in the openID username input "form"
     $("#openid-provider-username-submit").bind('click', function() {
-        var openIDURL = $("#before-username-field").text()
-        + $("#openid-provider-username").val()
-        + $("#after-username-field").text();
+        var openIDURL = $("#before-username-field").text() +
+			$("#openid-provider-username").val() +
+			$("#after-username-field").text();
         submitOpenIDLoginForm(openIDURL);
     });
 
