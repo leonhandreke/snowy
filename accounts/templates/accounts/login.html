@@ -39,7 +39,7 @@
     </div>
     <div id="more-providers"><a href="#">more...</a></div>
     <div id="extra-openid-provider-buttons" style="display: none;"></div>
-    <div id="openid-provider-username-section" style="display: none;">
+    <div id="openid-provider-username-form" style="display: none;">
         <h3>
             {% trans "Please supply your" %}
             <span id="openid-username-provider-name"></span>
@@ -52,7 +52,6 @@
     </div>
 
     <br />
-
     <form style="display: none" id="openid-login-form" name="fopenid" action="{% url openid-login %}" method="post">
         <h3>OpenID</h3>
         <b>{{ openid_form.openid_identifier.label_tag }}</b>

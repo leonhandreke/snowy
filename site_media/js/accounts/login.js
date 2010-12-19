@@ -14,20 +14,13 @@ function submitOpenIDLoginForm(openIDURL) {
     $("#openid-login-form").submit();
 }
 
-function showMoreOpenIDOptions() {
-    $("#openid-login-form").show();
-    $("#more-openid-options").hide();
-    // fade the user/pass login form out a bit to focus on openID
-    $("#auth-login-form").fadeTo(0.5, 0.5);
-}
-
-function openIDProviderButton(providerName) {
-    provider = providerName.toLowerCase();
-    return $('<a href="#" class="openid-provider-button" provider="' + provider + '">\
-        <img src="' + MEDIA_URL + 'img/accounts/openid/' + provider + '.png" /></a>');
-}
 
 function insertOpenIDProviderButtons() {
+    var openIDProviderButton = function (providerName) {
+        provider = providerName.toLowerCase();
+        return $('<a href="#" class="openid-provider-button" provider="' + provider + '">\
+                <img src="' + MEDIA_URL + 'img/accounts/openid/' + provider + '.png" /></a>');
+    };
     for (var provider in mainOpenIDProviders) {
         $("#main-openid-provider-buttons").prepend(openIDProviderButton(provider));
     }
@@ -39,13 +32,17 @@ function insertOpenIDProviderButtons() {
         var provider = openIDProviders[$(this).attr('provider')];
         if (provider != undefined) {
             if (provider.url.indexOf("{username}") != -1) {
+                // split the url and put it before/after the username field
                 var urlComponents = provider.url.split("{username}");
                 $('#openid-username-provider-name').text(provider.name);
                 $('#before-username-field').text(urlComponents[0]);
                 $('#after-username-field').text(urlComponents[1]);
-                $('#openid-provider-username-section').show();
-                // fade the user/pass login form out a bit to focus on openID
-                $("#auth-login-form").fadeTo(0.5, 0.5);
+                // hide the OpenID URL form that may still be there
+                $("#openid-login-form").hide();
+                // show the newly constructed pseudo-form
+                $('#openid-provider-username-form').show();
+                // focus on the new username entry field
+                $("#openid-provider-username").focus();
             }
             else {
                 // this provider has one URL for all users
@@ -80,7 +77,7 @@ $(document).ready(function() {
         + $("#openid-provider-username").val()
         + $("#after-username-field").text();
         submitOpenIDLoginForm(openIDURL);
-        });
+    });
 
     // simulate a log in button press when pressing enter in the username field
     $("#openid-provider-username").bind('keypress', function(e) {
@@ -94,14 +91,20 @@ $(document).ready(function() {
     // bind the pure OpenID URL button
     $("#openid-url-provider-button").bind('click', function () {
         $("#openid-login-form").show();
+        // focus on the new input field
         $("#id_openid_identifier").focus();
-        // fade the user/pass login form out a bit to focus on openID
-        $("#auth-login-form").fadeTo(0.5, 0.5);
+        /// hide the username entry form that may still be there
+        $("#openid-provider-username-form").hide();
     });
     // bind the "more..." button
     $("#more-providers").bind('click', function () {
         $("#extra-openid-provider-buttons").show();
+        // hide the "more" button
         $("#more-providers").hide();
+        // hide the username entry form that may still be there
+        $("#openid-provider-username-form").hide();
+        // hide the OpenID URL form that may still be there
+        $("#openid-login-form").hide();
     });
 });
 
