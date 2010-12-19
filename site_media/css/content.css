@@ -1,9 +1,9 @@
 #content-container {
     border-radius: 5px;
-    border: 3px solid black;
+    border: 1px solid black;
     /* In case the content does not fill up the container just blend in */
     vertical-align: top;
-    background-color: #ffffff;
+    background-color: #F2F2F2;
 }
 
 #content {
@@ -20,7 +20,7 @@
 #note-header {
     position: relative;
     top: 0px;
-    border-bottom: 2px solid black;
+    border-bottom: 1px solid black;
     padding: 8px 12px 8px 24px;
     background: -webkit-gradient(linear, left top, left bottom, from(#f5e599), to(#ffffff));
     background: -moz-linear-gradient(top,  #f5e599, #ffffff);

@@ -39,6 +39,8 @@ function insertOpenIDProviderButtons() {
                 $('#after-username-field').text(urlComponents[1]);
                 // hide the OpenID URL form that may still be there
                 $("#openid-login-form").hide();
+                // clear the username field from whatever was there before
+                $("#openid-provider-username").val('');
                 // show the newly constructed pseudo-form
                 $('#openid-provider-username-form').show();
                 // focus on the new username entry field
