@@ -40,6 +40,7 @@ from django_openid_auth.models import UserOpenID
 from django_openid_auth.forms import OpenIDLoginForm
 
 import django_openid_auth.views
+import django.contrib.auth.views
 
 def openid_registration(request, template_name='registration/registration_form.html'):
     registration_form = OpenIDRegistrationFormUniqueUser(request.POST or None)
@@ -132,7 +133,15 @@ def accounts_login(request, template_name='accounts/login.html', *args, **kwargs
     openid_form = OpenIDLoginForm()
     # change the label text to something nicer
     openid_form.fields['openid_identifier'].label = _("OpenID")
-    auth_form = AuthenticationForm()
+    if request.method == "POST":
+        auth_form = AuthenticationForm(data=request.POST)
+        # If is_valid() returns true we can be 99% certain there won't be an error when loggging in
+        if auth_form.is_valid():
+            # Pass control to django_auth and return the result
+            return django.contrib.auth.views.login(request, auth_form.get_user())
+    else:
+        auth_form = AuthenticationForm(request)
+
     return render_to_response(template_name, {
         'auth_form': auth_form,
         'openid_form': openid_form },

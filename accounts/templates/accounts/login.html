@@ -21,6 +21,9 @@
 <br />
 {% endfor %}
 {% endif %}
+{% if auth_form.errors %}
+	<div class="error center" style="color: red;">{% trans "Your username and password didn't match. Please try again." %}</div>
+{% endif %}
 <div id="login-container">
     <h2>
         {% if user.is_authenticated %}
@@ -29,7 +32,7 @@
             <h1>Log in to {{ site.name }}</h1>
         {% endif %}
     </h2>
-    <form method="post" id="auth-login-form" action="{% url registration_login %}">
+    <form method="post" id="auth-login-form" action="{% url auth_login %}">
         <b>{{ auth_form.username.label_tag }}</b>
         {{ auth_form.username }}
         <br />
