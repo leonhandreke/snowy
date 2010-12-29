@@ -60,10 +60,6 @@ urlpatterns = patterns('',
         name='auth_password_reset_complete'),
     url(r'^password/reset/done/$', auth_views.password_reset_done,
         name='auth_password_reset_done'),
-    # name this url auth login because some libraries expects the "default login"
-    # url to be called auth_login
-    url(r'^register/login/$', auth_views.login, {'template_name': 'accounts/login.html'},
-        name='registration_login'),
     url(r'^register/$', register, {'form_class': RegistrationFormUniqueUser},
         name='registration_register'),
     url(r'^register/complete/$', direct_to_template,
