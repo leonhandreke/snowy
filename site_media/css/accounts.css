@@ -34,12 +34,14 @@
 
 #login-container #id_username {
     background: url('/site_media/img/accounts/users.png') no-repeat;
-    background-position: 95%;
+    background-position: 2%;
+    padding-left: 3.5em;
 }
 
 #login-container #id_password {
     background: url('/site_media/img/accounts/keyring.png') no-repeat;
-    background-position: 95%;
+    background-position: 2%;
+    padding-left: 3.5em;
 }
 
 #login-container input {
