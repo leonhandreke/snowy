@@ -92,6 +92,8 @@ $(document).ready(function() {
     // bind the pure OpenID URL button
     $("#openid-url-provider-button").bind('click', function () {
         $("#openid-login-form").show();
+        // clear the openID URL field
+        $("#id_openid_identifier").val('');
         // focus on the new input field
         $("#id_openid_identifier").focus();
         /// hide the username entry form that may still be there
@@ -107,5 +109,8 @@ $(document).ready(function() {
         // hide the OpenID URL form that may still be there
         $("#openid-login-form").hide();
     });
+
+    // focus the username field
+    $("#id_username").focus()
 });
 
