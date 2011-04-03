@@ -112,6 +112,11 @@ var Note = Backbone.Model.extend({
       // Generate a new UUID in case the note doesn't have on yet
       this.set({"guid": guid()});
     }
+    else {
+      /* This model is not new because the guid is already known at creation
+       * Set the guid as id to mark the model as available on the server */
+       this.id = this.get('guid');
+     }
     if (!this.get("title")) {
       // Default the new note title to "New Note"
       this.set({"title": "New Note"});
