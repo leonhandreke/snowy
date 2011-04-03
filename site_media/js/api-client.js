@@ -22,32 +22,34 @@ var Note = Backbone.Model.extend({
     }
     if (!this.get("create-date")) {
       // Assume the note was created now
-      this.set({"create-date": Date.today().toISOString()});
+      this.set({"create-date": Date.now().toISOString()});
     }
     if (!this.get("last-change-date")) {
-      this.set({"last-change-date": Date.today().toISOString()});
+      this.set({"last-change-date": Date.now().toISOString()});
     }
     if (!this.get("last-metadata-change-date")) {
-      this.set({"last-metadata-change-date": Date.today().toISOString()});
+      this.set({"last-metadata-change-date": Date.now().toISOString()});
     }
     if (!this.get("pinned")) {
       // Set default pinned state to false
       this.set({"pinned": false});
     }
+    this._set = this.set;
+    this.set = this.noteSet
   },
 
   // Override set to update last-change-date and last-metadata-change-date
-  set : function(attrs, options) {
+  noteSet : function(attrs, options) {
     // Let the prototype set the new attributes
-    if(this.prototype.set(attrs, options)) {
+    if(this._set(attrs, options)) {
       // If the content of the note was changed, update last-changed-date
       if (attrs["title"] || attrs["note-content"]) {
-        this.set({"last-change-date": Date.today().toISOString() });
+        this.set({"last-change-date": Date.now().toISOString() });
       }
       // If the metadata of the note was changed, update last-metadata-change-date
       if (attrs["tags"] || attrs["note-content-version"] || attrs["create-date"]
       || attrs["last-change-date"] || attrs["pinned"]) {
-        this.set({"last-metadata-change-date": Date.today().toISOString()});
+        this.set({"last-metadata-change-date": Date.now().toISOString()});
       }
     }
   }
