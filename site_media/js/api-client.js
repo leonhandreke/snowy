@@ -68,41 +68,19 @@ _.extend(SnowyServer.prototype, Backbone.Events, {
     return update(model);
   },
   read: function(model, success, error) {
-    var gotNotes = function(response) {
-      // Check if the model is a single note object
-      if (model instanceof Note) {
-        // Pass only the relevant object to the success handler
-        success(_.detect(response['notes'], function(note) {
-          return(note['guid'] == model.get('guid'));
-        }));
-      }
-      // Check if the model is a Collection of Notes
-      if (model instanceof NotesCollection) {
-        success(response['notes']);
-      }
-    };
     var params = {
-      // Appending the include_notes GET variable tells the server to send the note content as well
-      url: this.notesRef + "?include_notes=true",
-      success: gotNotes,
+      url: getUrl(model),
+      success: success,
       error: error
     }
     $.ajax(params);
   }
-
 });
 
-Backbone.sync = function(method, model, success, error) {
-  var resp;
+  Backbone.sync = function(method, model, success, error) {
   var server = model.server || model.collection.server;
-
-  switch (method) {
-    case "read": resp = server.read(model, success, error); break;
-    case "create": resp = server.create(model, success, error); break;
-    case "update": resp = server.update(model, success, error); break;
-    case "delete": resp = server.destroy(model, success, error); break;
-  }
-
+  // Let the server object handle all methods
+  server[method](model, success, error);
 };
 
 var Note = Backbone.Model.extend({
@@ -117,19 +95,6 @@ var Note = Backbone.Model.extend({
        * Set the guid as id to mark the model as available on the server */
        this.id = this.get('guid');
      }
-    if (!this.get("title")) {
-      // Default the new note title to "New Note"
-      this.set({"title": "New Note"});
-    }
-    if (!this.get("note-content")) {
-      this.set({"note-content": "Describe your new note here"});
-    }
-    if (!this.get("tags")) {
-      this.set({"tags": []});
-    }
-    if (!this.get("note-content-version")) {
-      this.set({"note-content-version": 0.1});
-    }
     if (!this.get("create-date")) {
       // Assume the note was created now
       this.set({"create-date": Date.now().toISOString()});
@@ -140,13 +105,17 @@ var Note = Backbone.Model.extend({
     if (!this.get("last-metadata-change-date")) {
       this.set({"last-metadata-change-date": Date.now().toISOString()});
     }
-    if (!this.get("pinned")) {
-      // Set default pinned state to false
-      this.set({"pinned": false});
-    }
     // Hacky-hacky solution to let the custom set use the original set
     this._set = this.set;
     this.set = this.noteSet
+  },
+
+  defaults: {
+    'title': "New Note",
+    'note-content': "Describe your new note here",
+    'tags': [],
+    'note-content-version': '0.1',
+    'pinned': false
   },
 
   // Override set to update last-change-date and last-metadata-change-date
@@ -163,16 +132,43 @@ var Note = Backbone.Model.extend({
         this.set({"last-metadata-change-date": Date.now().toISOString()});
       }
     }
+  },
+
+  parse: function(response) {
+    // Check if a collection response was passed to us
+    if (response['notes']) {
+      // Pass on only the relevant objectr
+      return (_.detect(response['notes'], function(note) {
+        return(note['guid'] == this.get('guid'));
+      }));
+    }
+    return response;
+  },
+  url: function() {
+    // Notes do not have their own URL but are always part of a collection
+    return getUrl(this.collection);
   }
 });
 
 var NotesCollection = Backbone.Collection.extend({
   model: Note,
+  parse: function(response) {
+    // Pass on only the notes object if available
+    return response['notes'] || response;
+  },
+  url: function() {
+    return this.server.notesRef + '?include_notes=true';
+  }
 });
 
 var Notes = new NotesCollection();
 Notes.server = new SnowyServer(location.origin)
 
+// Stolen from the backbone.js source
+var getUrl = function(object) {
+  if (!(object && object.url)) throw new Error("A 'url' property or function must be specified");
+  return _.isFunction(object.url) ? object.url() : object.url;
+};
 
 // UUID generation code stolen from backbone-localstorage.js
 // Generate four random hex digits.
