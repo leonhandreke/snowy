@@ -16,8 +16,8 @@ _.extend(SnowyServer.prototype, Backbone.Events, {
     var gotUserRef = function(response) {
       // Check if the reponse contains the required fields
       if(response && response['user-ref'] && response['user-ref']['api-ref']) {
-        server.userRef = response['user-ref']['api-ref'];
-        server.trigger("gotUserRef", server.userRef);
+        server['user-ref'] = response['user-ref']['api-ref'];
+        server.trigger("gotUserRef", server['user-ref']);
       }
       else {
         // If nobody is logged in, there is no user-ref field in the reply
@@ -39,9 +39,9 @@ _.extend(SnowyServer.prototype, Backbone.Events, {
     // Callback upon successful completion of the request
     var gotNotesRef = function(response) {
       // TODO: Maybe some error handling here? Who knows what could go wrong...
-      server.notesRef = response['notes-ref']['api-ref'];
-      server.trigger("gotNotesRef", server.userRef);
-      server.latestSyncRevision = response['latest-sync-revision'];
+      server['latest-sync-revision'] = response['latest-sync-revision'];
+      server['notes-ref'] = response['notes-ref']['api-ref'];
+      server.trigger("gotNotesRef", server['notes-ref']);
       server.user = {
         username: response['user-name'],
         firstName: response['first-name'],
@@ -49,7 +49,7 @@ _.extend(SnowyServer.prototype, Backbone.Events, {
       };
     };
     var params = {
-      url: this.userRef,
+      url: this['user-ref'],
       type: 'GET',
       success: gotNotesRef
     };
@@ -57,19 +57,43 @@ _.extend(SnowyServer.prototype, Backbone.Events, {
   },
 
   update: function(model, success, error) {
-    var changes = [model.toJSON()];
-    var updateMessage = {
+    var changes = model.toJSON();
+    if (!(changes instanceof Array)) {
+      changes = [changes];
+    }
+    var updateJSON = {
       "latest-sync-revision": (this['latest-sync-revision'] + 1),
       "note-changes": changes
     }
-    // TODO: actually make the request somewhere
+    // Set up so the request callbacks can access the server object
+    var server = this;
+
+    var params = {
+      url: getUrl(model),
+      type: 'PUT',
+      contentType: 'application/json',
+      data: JSON.stringify(updateJSON),
+      dataType: 'json',
+      processData: false,
+      success: function(response) {
+        server['latest-sync-revision'] = response['latest-sync-revision'];
+        // Fetch the collection because the compressed note listing is not of much use
+        var collection = model.collection || model;
+        collection.fetch();
+        if (success) success(response);
+      },
+      error: error
+    }
+    $.ajax(params);
+    // Provisionally up sync revision, it gets reread from the response anyway
+    this['latest-sync-revision'] += 1;
   },
   create: function(model, success, error) {
-    return update(model);
+    return this.update(model);
   },
   read: function(model, success, error) {
     var params = {
-      url: getUrl(model),
+      url: getUrl(model),// + '?include_notes=true',
       success: success,
       error: error
     }
@@ -91,11 +115,11 @@ var Note = Backbone.Model.extend({
       this.set({"guid": guid()});
     }
     else {
-      /* This model is not new because the guid is already known at creation
-       * Set the guid as id to mark the model as available on the server */
-       this.id = this.get('guid');
-     }
-    if (!this.get("create-date")) {
+      // This model is not new because the guid is already known at creation
+      // Set the guid as id to mark the model as available on the server
+      this.id = this.get('guid');
+    }
+    /*if (!this.get("create-date")) {
       // Assume the note was created now
       this.set({"create-date": Date.now().toISOString()});
     }
@@ -104,7 +128,7 @@ var Note = Backbone.Model.extend({
     }
     if (!this.get("last-metadata-change-date")) {
       this.set({"last-metadata-change-date": Date.now().toISOString()});
-    }
+    }*/
     // Hacky-hacky solution to let the custom set use the original set
     this._set = this.set;
     this.set = this.noteSet
@@ -115,7 +139,10 @@ var Note = Backbone.Model.extend({
     'note-content': "Describe your new note here",
     'tags': [],
     'note-content-version': '0.1',
-    'pinned': false
+    'pinned': false,
+    "last-change-date": "2009-04-19T21:29:23.2197340-07:00",
+    "last-metadata-change-date": "2009-04-19T21:29:23.2197340-07:00",
+    "create-date": "2008-03-06T13:44:46.4342680-08:00"
   },
 
   // Override set to update last-change-date and last-metadata-change-date
@@ -157,7 +184,7 @@ var NotesCollection = Backbone.Collection.extend({
     return response['notes'] || response;
   },
   url: function() {
-    return this.server.notesRef + '?include_notes=true';
+    return this.server['notes-ref'] + '?include_notes=true';
   }
 });
 
