@@ -107,6 +107,7 @@ def openid_begin(request, **kwargs):
     return django_openid_auth.views.login_begin(request, render_failure=render_openid_failure,
                                                    **kwargs)
 
+@csrf_exempt
 def openid_complete(request, **kwargs):
     """A wrapper view around the login_complete view in
     django_openid_auth that features a nicer error page"""
