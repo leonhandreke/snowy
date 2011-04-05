@@ -28,23 +28,27 @@
     margin-right: auto;
 }
 
+/* labels for the text input fields */
 #login-container label {
     padding: 0.25em;
 }
 
+/* username input field */
 #login-container #id_username {
     background: url('/site_media/img/accounts/users.png') no-repeat;
     background-position: 2%;
     padding-left: 3.5em;
 }
 
+/* password input field */
 #login-container #id_password {
     background: url('/site_media/img/accounts/keyring.png') no-repeat;
     background-position: 2%;
     padding-left: 3.5em;
 }
 
-#login-container input {
+/* text input fields */
+#login-container input[type="text"], #login-container input[type="password"] {
     padding: 1em;
     margin: 0.8em;
     border: 1px solid gray;
@@ -52,10 +56,6 @@
 }
 
 .openid-provider-button {
-    display: inline-block;
-    padding: 3px;
-    border: 1px solid gray;
-    border-radius: 2px;
     margin: 3px;
 }
 

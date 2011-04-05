@@ -45,10 +45,12 @@
     <h2>...or log in with:</h2>
     {% endif %}
     <div id="main-openid-provider-buttons">
+        {% comment %}Initially visible provider buttons are inserted here{% endcomment %}
         <a id="openid-url-provider-button" href="#" class="openid-provider-button"><img src="{{ MEDIA_URL }}img/accounts/openid/openid.png" /></a>
     </div>
     <div id="more-providers"><a href="#">more...</a></div>
-    <div id="extra-openid-provider-buttons" style="display: none;"></div>
+    <div id="extra-openid-provider-buttons" style="display: none;">{% comment %}Extra provider buttons are inserted here{% endcomment %}</div>
+
     <div id="openid-provider-username-form" style="display: none;">
         <h3>
             {% trans "Please supply your" %}
