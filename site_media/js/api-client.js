@@ -1,6 +1,6 @@
 // A backbone.js based client to interact with the snowy REST API
 
-/*var SnowyServer = function(baseURL) {
+var SnowyServer = function(baseURL) {
   this.baseURL = baseURL + '/api/1.0';
   // Request the user reference
   this.getUserRef();
@@ -9,6 +9,42 @@
 }
 
 _.extend(SnowyServer.prototype, Backbone.Events, {
+  // queue for operations so only one request is made at a time
+  queuedNoteChanges: [],
+  pushQueuedNoteChanges: function() {
+    // Don't push anything if there are no changes to push
+    if (this.queuedNoteChanges.length < 1) return;
+    var updateJSON = {
+      "latest-sync-revision": (this['latest-sync-revision'] + 1),
+      "note-changes": this.queuedNoteChanges
+    }
+    // Set up so the request callbacks can access the server object
+    var server = this;
+    // Remember which changes were submitted so we can retry
+    var submittedNoteChanges = this.queuedNoteChanges;
+    // Empty queue of note changes
+    this.queuedNoteChanges = [];
+
+    var params = {
+      url: server['notes-ref'] + '?include_notes=true',
+      type: 'PUT',
+      contentType: 'application/json',
+      data: JSON.stringify(updateJSON),
+      dataType: 'json',
+      processData: false,
+      success: function(response) {
+        server['latest-sync-revision'] = response['latest-sync-revision'];
+        // TODO: Maybe fetch notes again here?
+      },
+      error: function(response) {
+        // TODO: Maybe retry?
+        // or split the note changes up and submit each change individually
+        // or simply roll back
+      }
+    }
+    $.ajax(params);
+  },
+
   // Request the user reference for the currently logged-in user
   getUserRef: function() {
     var server = this;
@@ -57,58 +93,33 @@ _.extend(SnowyServer.prototype, Backbone.Events, {
   },
 
   update: function(model, success, error) {
-    var changes = model.toJSON();
-    if (!(changes instanceof Array)) {
-      changes = [changes];
-    }
-    var updateJSON = {
-      "latest-sync-revision": (this['latest-sync-revision'] + 1),
-      "note-changes": changes
-    }
-    // Set up so the request callbacks can access the server object
-    var server = this;
-
-    var params = {
-      url: getUrl(model),
-      type: 'PUT',
-      contentType: 'application/json',
-      data: JSON.stringify(updateJSON),
-      dataType: 'json',
-      processData: false,
-      success: function(response) {
-        server['latest-sync-revision'] = response['latest-sync-revision'];
-        // Fetch the collection because the compressed note listing is not of much use
-        var collection = model.collection || model;
-        collection.fetch();
-        if (success) success(response);
-      },
-      error: error
-    }
-    $.ajax(params);
-    // Provisionally up sync revision, it gets reread from the response anyway
-    this['latest-sync-revision'] += 1;
+    // queue the model to be sent to the server
+    this.queuedNoteChanges.push(model.toJSON());
   },
   create: function(model, success, error) {
     return this.update(model);
   },
   read: function(model, success, error) {
+    var server = this;
     var params = {
-      url: getUrl(model),// + '?include_notes=true',
-      success: success,
+      url: server['notes-ref'] + '?include_notes=true',
+      success: function(response) {
+        server['latest-sync-revision'] = response['latest-sync-revision'];
+        // Check if we are reading a model or a collection
+        if (model.collection) {
+          if (success) success(_.detect(response['notes'], function(note) {
+            return(note['guid'] == this.get('guid'));
+          }));
+        } else {
+          // Model is a collection
+          if (success) success(response['notes']);
+        }
+      },
       error: error
     }
     $.ajax(params);
   }
 });
-
-/*
-Backbone.sync = function(method, model, success, error) {
-  var server = model.server || model.collection.server;
-  // Let the server object handle all methods
-  server[method](model, success, error);
-};
-*/
-
 
 // Our Store is represented by a single JS object in *localStorage*. Create it
 // with a meaningful name, like the name you'd give a table.
@@ -163,22 +174,35 @@ _.extend(Store.prototype, {
 // Override `Backbone.sync` to use delegate to the model or collection's
 // *localStorage* property, which should be an instance of `Store`.
 Backbone.sync = function(method, model, success, error) {
-
-  var resp;
+  var storageResponse;
   var store = model.localStorage || model.collection.localStorage;
 
   switch (method) {
-    case "read":    resp = model.id ? store.find(model) : store.findAll(); break;
-    case "create":  resp = store.create(model);                            break;
-    case "update":  resp = store.update(model);                            break;
-    case "delete":  resp = store.destroy(model);                           break;
+    case "read": storageResponse = model.id ? store.find(model) : store.findAll(); break;
+    case "create": storageResponse = store.create(model); break;
+    case "update": storageResponse = store.update(model); break;
+    case "delete": storageResponse = store.destroy(model); break;
   }
 
-  if (resp && success) {
-    success(resp);
+  if (storageResponse) {
+    if (success) {
+      success(storageResponse);
+    }
   } else {
-    if (error)
-    error("Record not found");
+    if (error) {
+      error("Record not found");
+    }
+  }
+
+  // Make the request to the server only once the local storage has
+  // returned a result. The possible more up-to-date server version of
+  // the data should not be overwritten by the possibly outdated local
+  // storage results
+  var snowyServer = model.snowyServer || model.collection.snowyServer;
+  // Only try to save if the model has a server associated
+  if (snowyServer) {
+    // Let the server object handle all methods
+    snowyServer[method](model, success, error);
   }
 };
 
@@ -194,7 +218,7 @@ var Note = Backbone.Model.extend({
       // Set the guid as id to mark the model as available on the server
       this.id = this.get('guid');
     }
-    /*if (!this.get("create-date")) {
+    if (!this.get("create-date")) {
       // Assume the note was created now
       this.set({"create-date": Date.now().toISOString()});
     }
@@ -203,7 +227,7 @@ var Note = Backbone.Model.extend({
     }
     if (!this.get("last-metadata-change-date")) {
       this.set({"last-metadata-change-date": Date.now().toISOString()});
-    }*/
+    }
     // Hacky-hacky solution to let the custom set use the original set
     this._set = this.set;
     this.set = this.noteSet
@@ -215,9 +239,6 @@ var Note = Backbone.Model.extend({
     'tags': [],
     'note-content-version': '0.1',
     'pinned': false,
-    "last-change-date": "2009-04-19T21:29:23.2197340-07:00",
-    "last-metadata-change-date": "2009-04-19T21:29:23.2197340-07:00",
-    "create-date": "2008-03-06T13:44:46.4342680-08:00"
   },
 
   // Override set to update last-change-date and last-metadata-change-date
@@ -238,44 +259,17 @@ var Note = Backbone.Model.extend({
     } else {
       return false;
     }
-  },
-
-  parse: function(response) {
-    // Check if a collection response was passed to us
-    if (response['notes']) {
-      // Pass on only the relevant objectr
-      return (_.detect(response['notes'], function(note) {
-        return(note['guid'] == this.get('guid'));
-      }));
-    }
-    return response;
-  },
-  url: function() {
-    // Notes do not have their own URL but are always part of a collection
-    return getUrl(this.collection);
   }
 });
 
 var NotesCollection = Backbone.Collection.extend({
-  model: Note,
-  localStorage: new Store('notes'),
-  parse: function(response) {
-    // Pass on only the notes object if available
-    return response['notes'] || response;
-  },
-  url: function() {
-    return this.server['notes-ref'] + '?include_notes=true';
-  }
+  model: Note
 });
 
+// Set up notes collection used by the application
 var Notes = new NotesCollection();
-//Notes.server = new SnowyServer(location.origin)
-
-// Stolen from the backbone.js source
-var getUrl = function(object) {
-  if (!(object && object.url)) throw new Error("A 'url' property or function must be specified");
-  return _.isFunction(object.url) ? object.url() : object.url;
-};
+Notes.localStorage = new Store('notes');
+Notes.snowyServer = new SnowyServer(location.origin);
 
 // UUID generation code stolen from backbone-localstorage.js
 // Generate four random hex digits.
