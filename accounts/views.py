@@ -141,7 +141,7 @@ def accounts_login(request, template_name='accounts/login.html', *args, **kwargs
             # Pass control to django_auth and return the result
             return django.contrib.auth.views.login(request, auth_form.get_user())
     else:
-        auth_form = AuthenticationForm(request)
+        auth_form = AuthenticationForm()
 
     return render_to_response(template_name, {
         'auth_form': auth_form,
