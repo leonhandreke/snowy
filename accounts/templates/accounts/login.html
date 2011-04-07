@@ -29,7 +29,7 @@
         {% if user.is_authenticated %}
             {% trans "Add a New OpenID Identity to Your Account" %}
         {% else %}
-            <h1>Log in to {{ site.name }}</h1>
+        <h1>{% trans "Log in to" %} {{ site.name }}</h1>
         {% endif %}
     </h2>
     {% if not user.is_authenticated %}
@@ -42,13 +42,14 @@
         <br />
         <input type="submit" value="{% trans "Log in" %}">
     </form>
-    <h2>...or log in with:</h2>
+    <h2>...{% trans"or log in with" }:</h2>
     {% endif %}
     <div id="main-openid-provider-buttons">
         {% comment %}Initially visible provider buttons are inserted here{% endcomment %}
         <a id="openid-url-provider-button" href="#" class="openid-provider-button"><img src="{{ MEDIA_URL }}img/accounts/openid/openid.png" /></a>
     </div>
-    <div id="more-providers"><a href="#">more...</a></div>
+    {% comment %}Translators: "more..." in this context means "Show more providers"{% endcomment %}
+    <div id="more-providers"><a href="#">{% trans "more..." %}</a></div>
     <div id="extra-openid-provider-buttons" style="display: none;">{% comment %}Extra provider buttons are inserted here{% endcomment %}</div>
 
     <div id="openid-provider-username-form" style="display: none;">
@@ -58,48 +59,19 @@
             {% trans "username" %}
         </h3>
         <label for="openid-provider-username" id="before-username-field"></label>
-        <input id="openid-provider-username" type="text" placeholder="username" />
+        <input id="openid-provider-username" type="text" placeholder="{% trans "username" %}" />
         <label for="openid-provider-username" id="after-username-field"></label>
-        <input type="button" id="openid-provider-username-submit" value="Log in">
+        <input type="button" id="openid-provider-username-submit" value="{% trans "Log in" %}">
     </div>
 
     <br />
     <form style="display: none" id="openid-login-form" name="fopenid" action="{% url openid-login %}" method="post">
-        <h3>OpenID</h3>
+        <h3>{% trans "OpenID" %}</h3>
         <b>{{ openid_form.openid_identifier.label_tag }}</b>
         {{ openid_form.openid_identifier }}
         <br />
         <input name="bsignin" type="submit" value="{% trans "Log in with your OpenID" %}">
         <br />
-    <div>{% trans "Don't have an OpenID yet? Get one " %}<a href="http://openid.net/get-an-openid/" alt="Get an OpenID">{% trans "here!" %}</a></div>
+        <div>{% trans "Don't have an OpenID yet? Get one " %}<a href="http://openid.net/get-an-openid/" alt="{% trans "Get an OpenID" %}">{% trans "here!" %}</a></div>
     </form>
-    <!--
-<div id="login-rightcolumn">
-    <h3>{% trans "...or use one of the following services:" %}</h3>
-    <br />
-<form action="{{ action }}" method="post" id="openid_form">
-
-    <fieldset>
-            <legend>Sign-in or Create New Account</legend>
-            <div id="openid_choice">
-                <p>Please click your account provider:</p>
-                <div id="openid_btns"></div>
-            </div>
-            <div id="openid_input_area">
-                <input id="openid_identifier" name="openid_identifier" type="text" value="http://" />
-                <input id="openid_submit" type="submit" value="Sign-In"/>
-            </div>
-            <noscript>
-            <p>OpenID is service that allows you to log-on to many different websites using a single indentity.
-            Find out <a href="http://openid.net/what/">more about OpenID</a> and <a href="http://openid.net/get/">how to get an OpenID enabled account</a>.</p>
-            </noscript>
-            {% if next %}
-            <input type="hidden" name="next" value="{{ next }}" />
-            {% endif %}
-    </fieldset>
-</form>
-</div>
--->
-<!-- the following div makes sure the float layout works correctly -->
-<!--<div style="clear: both;"></div>-->
 {% endblock %}
