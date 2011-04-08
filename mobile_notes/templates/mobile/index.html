@@ -1,12 +1,26 @@
 <!DOCTYPE html>
-<html manifest="cache.manifest">
+<!--<html manifest="cache.manifest">-->
+    <html>
     <head>
         <title>Slick Notes</title>
-        <link rel="stylesheet" href="{{ jquery_mobile_css_uri }}" />
-        <script src="{{ jquery_uri }}"></script>
-        <script src="{{ jquery_mobile_js_uri }}"></script>
-        <script src="{{ MEDIA_URL }}js/underscore-min.js"></script>
-        <script src="{{ MEDIA_URL }}js/backbone.js"></script>
+        {% comments %}TODO: Figure out why DEBUG does not work{% endcomment %}
+        {% if True %}
+        <link rel="stylesheet" href="{{ MEDIA_URL }}css/jquery.mobile-1.0a4.1.css" />
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.js" charset="utf-8"></script>
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.tmpl.js" charset="utf-8"></script>
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.tmpload.js" charset="utf-8"></script>
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.mobile-1.0a4.1.js" charset="utf-8"></script>
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/underscore.js" charset="utf-8"></script>
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/backbone.js" charset="utf-8"></script>
+        {% else %}
+        <link rel="stylesheet" href="{{ MEDIA_URL }}css/jquery.mobile-1.0a4.1.min.css" />
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.min.js" charset="utf-8"></script>
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.tmpl.min.js" charset="utf-8"></script>
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.tmpload.min.js" charset="utf-8"></script>
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.mobile-1.0a4.1.min.js" charset="utf-8"></script>
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/underscore.min.js" charset="utf-8"></script>
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/backbone.min.js" charset="utf-8"></script>
+        {% endif %}
         <script src="{{ MEDIA_URL }}js/api-client.js"></script>
         <script type="text/javascript">
 
