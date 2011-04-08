@@ -26,7 +26,7 @@ _.extend(SnowyServer.prototype, Backbone.Events, {
     this.queuedNoteChanges = [];
 
     var params = {
-      url: server['notes-ref'] + '?include_notes=true',
+      url: server['notes-ref'],
       type: 'PUT',
       contentType: 'application/json',
       data: JSON.stringify(updateJSON),
@@ -37,8 +37,10 @@ _.extend(SnowyServer.prototype, Backbone.Events, {
         if (success) success(response);
       },
       error: function(response) {
-        // TODO: Maybe retry?
-        // or split the note changes up and submit each change individually
+        // TODO: Maybe retry immediately? (Retransmission will happen
+        // on the next sync anyway)
+        // or split the note changes up and submit each change
+        // individually
         if (error) error();
       }
     }
@@ -119,10 +121,14 @@ _.extend(SnowyServer.prototype, Backbone.Events, {
   }
 });
 
-var SyncController = {
+// This functionality has its own object because it may be extended to
+// support more advanced features like intelligent merging in the future
+var snowySyncController = {
+  // Sync a collection of type NotesCollection
   syncNotesCollection: function(collection) {
     // Set this variable so anonymous function can access this
     var controller = this;
+    // Set up local and server storage variables for easy access
     var snowyServer = collection.snowyServer;
     var localStorage = collection.localStorage;
     // Fetch the latest revision from the server
@@ -131,8 +137,9 @@ var SyncController = {
         // The revision on the server is newer
         // TODO: Some intelligent merging of local changes with new revision
         // Refresh the notes from server notes
-        collection.refresh(serverNotes);
         localStorage.updateAll(collection);
+        // Fetch the working copy of the collection from localStorage
+        collection.fetch();
         // Update the local sync revision after successful push
         localStorage.syncRevision = snowyServer['latest-sync-revision'];
         localStorage.save();
@@ -143,8 +150,8 @@ var SyncController = {
         _.each(serverNotes, function(serverResponseNote) {
           var serverNote = new Note(serverResponseNote);
           var localNote = new Note(localStorage.find(serverNote));
+          // Check if this note on the server still exists locally
           if (localNote) {
-            // The note already exists locally
             // Check if the note has changed
             if (!serverNote.equals(localNote)) {
               // Note was updated locally, update with local content
@@ -158,7 +165,7 @@ var SyncController = {
         // Loop through the local notes to see which notes have been
         // added locally
         _.each(localStorage.findAll(), function(storageResponseNote) {
-          // See if the note exists in the server note set
+          // Check if the local note exists in the server note set
           if (!_.detect(serverNotes, function(serverResponseNote) {
             return serverResponseNote['guid'] == storageResponseNote['guid'];
           })) {
@@ -293,6 +300,7 @@ var Note = Backbone.Model.extend({
     this.set = this.noteSet
   },
 
+  // Compare two note objects and return true if they're equal
   equals: function(otherNote) {
     return (_.isEqual(this.get('guid'), otherNote.get('guid'))
     && _.isEqual(this.get('title'), otherNote.get('title'))
