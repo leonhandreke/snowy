@@ -1,6 +1,9 @@
 CACHE MANIFEST
 # Revision: 0.1
 index.html
+{{ MEDIA_URL }}js/backbone.js
+{{ MEDIA_URL }}js/api-client.js
+{{ MEDIA_URL }}js/underscore-min.js
 {{ jquery_uri }}
 {{ jquery_mobile_js_uri }}
 {{ jquery_mobile_css_uri }}

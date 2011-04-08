@@ -199,14 +199,16 @@ _.extend(Store.prototype, {
   // have an id of it's own.
   create: function(model) {
     if (!model.id) model.id = model.attributes.id = guid();
-    this.data[model.id] = model;
+    // save JSON representation to make sure localStorage only contains JSON
+    this.data[model.id] = model.toJSON();
     this.save();
     return model;
   },
 
   // Update a model by replacing its copy in `this.data`.
   update: function(model) {
-    this.data[model.id] = model;
+    // save JSON representation to make sure localStorage only contains JSON
+    this.data[model.id] = model.toJSON();
     this.save();
     return model;
   },
@@ -339,7 +341,7 @@ var NotesCollection = Backbone.Collection.extend({
 // Set up notes collection used by the application
 var Notes = new NotesCollection();
 Notes.localStorage = new Store('notes');
-Notes.snowyServer = new SnowyServer(location.origin);
+Notes.snowyServer = new SnowyServer('http://' + location.host);
 
 // UUID generation code stolen from backbone-localstorage.js
 // Generate four random hex digits.
