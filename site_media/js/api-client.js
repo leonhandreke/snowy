@@ -11,7 +11,7 @@ var SnowyServer = function(baseURL) {
 _.extend(SnowyServer.prototype, Backbone.Events, {
   // queue for operations so only one request is made at a time
   queuedNoteChanges: [],
-  pushQueuedNoteChanges: function() {
+  pushQueuedNoteChanges: function(success, error) {
     // Don't push anything if there are no changes to push
     if (this.queuedNoteChanges.length < 1) return;
     var updateJSON = {
@@ -34,12 +34,12 @@ _.extend(SnowyServer.prototype, Backbone.Events, {
       processData: false,
       success: function(response) {
         server['latest-sync-revision'] = response['latest-sync-revision'];
-        // TODO: Maybe fetch notes again here?
+        if (success) success(response);
       },
       error: function(response) {
         // TODO: Maybe retry?
         // or split the note changes up and submit each change individually
-        // or simply roll back
+        if (error) error();
       }
     }
     $.ajax(params);
@@ -99,21 +99,19 @@ _.extend(SnowyServer.prototype, Backbone.Events, {
   create: function(model, success, error) {
     return this.update(model);
   },
-  read: function(model, success, error) {
+  destroy: function(model, success, error) {
+    this.queuedNoteChanges.push({
+      'guid': model.get('guid'),
+      'command': 'delete'
+    });
+  },
+  readAll: function(model, success, error) {
     var server = this;
     var params = {
       url: server['notes-ref'] + '?include_notes=true',
       success: function(response) {
         server['latest-sync-revision'] = response['latest-sync-revision'];
-        // Check if we are reading a model or a collection
-        if (model.collection) {
-          if (success) success(_.detect(response['notes'], function(note) {
-            return(note['guid'] == this.get('guid'));
-          }));
-        } else {
-          // Model is a collection
-          if (success) success(response['notes']);
-        }
+        if (success) success(response['notes']);
       },
       error: error
     }
@@ -121,12 +119,72 @@ _.extend(SnowyServer.prototype, Backbone.Events, {
   }
 });
 
+var SyncController = {
+  syncNotesCollection: function(collection) {
+    // Set this variable so anonymous function can access this
+    var controller = this;
+    var snowyServer = collection.snowyServer;
+    var localStorage = collection.localStorage;
+    // Fetch the latest revision from the server
+    snowyServer.readAll(collection, function(serverNotes) {
+      if (snowyServer['latest-sync-revision'] > localStorage.syncRevision) {
+        // The revision on the server is newer
+        // TODO: Some intelligent merging of local changes with new revision
+        // Refresh the notes from server notes
+        collection.refresh(serverNotes);
+        localStorage.updateAll(collection);
+        // Update the local sync revision after successful push
+        localStorage.syncRevision = snowyServer['latest-sync-revision'];
+        localStorage.save();
+      } else {
+        // We locally have the newest version of the notes
+        // Loop through the server notes to see which notes have
+        // have changed or have been deleted locally
+        _.each(serverNotes, function(serverResponseNote) {
+          var serverNote = new Note(serverResponseNote);
+          var localNote = new Note(localStorage.find(serverNote));
+          if (localNote) {
+            // The note already exists locally
+            // Check if the note has changed
+            if (!serverNote.equals(localNote)) {
+              // Note was updated locally, update with local content
+              snowyServer.update(localNote);
+            }
+          } else {
+            // This note was deleted locally
+            snowyServer.destroy(serverNote);
+          }
+        });
+        // Loop through the local notes to see which notes have been
+        // added locally
+        _.each(localStorage.findAll(), function(storageResponseNote) {
+          // See if the note exists in the server note set
+          if (!_.detect(serverNotes, function(serverResponseNote) {
+            return serverResponseNote['guid'] == storageResponseNote['guid'];
+          })) {
+            // This is a note that has been created locally
+            // create it on the server too
+            snowyServer.create(new Note(storageResponseNote));
+          }
+        });
+        // Push any changes that may have been detected
+        snowyServer.pushQueuedNoteChanges(function() {
+          // Update the local sync revision after successful push
+          localStorage.syncRevision = snowyServer['latest-sync-revision'];
+          localStorage.save();
+        });
+      }
+    });
+  }
+};
+
 // Our Store is represented by a single JS object in *localStorage*. Create it
 // with a meaningful name, like the name you'd give a table.
 var Store = function(name) {
   this.name = name;
   var store = localStorage.getItem(this.name);
   this.data = (store && JSON.parse(store)) || {};
+  this.syncRevision = localStorage.getItem(this.name + 'syncRevision') || 0;
 };
 
 _.extend(Store.prototype, {
@@ -134,6 +192,7 @@ _.extend(Store.prototype, {
   // Save the current state of the **Store** to *localStorage*.
   save: function() {
     localStorage.setItem(this.name, JSON.stringify(this.data));
+    localStorage.setItem(this.name + 'syncRevision', this.syncRevision);
   },
 
   // Add a model, giving it a (hopefully)-unique GUID, if it doesn't already
@@ -150,6 +209,12 @@ _.extend(Store.prototype, {
     this.data[model.id] = model;
     this.save();
     return model;
+  },
+
+  updateAll: function(collection) {
+    _.each(collection.models, function(model) {
+      collection.localStorage.update(model)
+    });
   },
 
   // Retrieve a model from `this.data` by id.
@@ -193,17 +258,6 @@ Backbone.sync = function(method, model, success, error) {
       error("Record not found");
     }
   }
-
-  // Make the request to the server only once the local storage has
-  // returned a result. The possible more up-to-date server version of
-  // the data should not be overwritten by the possibly outdated local
-  // storage results
-  var snowyServer = model.snowyServer || model.collection.snowyServer;
-  // Only try to save if the model has a server associated
-  if (snowyServer) {
-    // Let the server object handle all methods
-    snowyServer[method](model, success, error);
-  }
 };
 
 var Note = Backbone.Model.extend({
@@ -213,24 +267,40 @@ var Note = Backbone.Model.extend({
       // Generate a new UUID in case the note doesn't have on yet
       this.set({"guid": guid()});
     }
-    else {
-      // This model is not new because the guid is already known at creation
-      // Set the guid as id to mark the model as available on the server
-      this.id = this.get('guid');
-    }
+    // Make the guid the model ID
+    this.id = this.get('guid');
+
     if (!this.get("create-date")) {
       // Assume the note was created now
-      this.set({"create-date": Date.now().toISOString()});
+      this.set({"create-date": (new Date()).toISOString()});
     }
+
     if (!this.get("last-change-date")) {
-      this.set({"last-change-date": Date.now().toISOString()});
+      this.set({"last-change-date": (new Date()).toISOString()});
     }
+
     if (!this.get("last-metadata-change-date")) {
-      this.set({"last-metadata-change-date": Date.now().toISOString()});
+      this.set({"last-metadata-change-date": (new Date()).toISOString()});
     }
+    if (!this.get('last-metadata-change-date') instanceof Date) {
+      this.set({'last-metadata-change-date': Date.parse(this.get('last-metadata-change-date'))});
+    }
+
     // Hacky-hacky solution to let the custom set use the original set
     this._set = this.set;
     this.set = this.noteSet
+  },
+
+  equals: function(otherNote) {
+    return (_.isEqual(this.get('guid'), otherNote.get('guid'))
+    && _.isEqual(this.get('title'), otherNote.get('title'))
+    && _.isEqual(this.get('note-content'), otherNote.get('note-content'))
+    && _.isEqual(this.get('pinned'), otherNote.get('pinned'))
+    && _.isEqual(this.get('note-content-version'), otherNote.get('note-content-version'))
+    && _.isEqual(this.get('tags'), otherNote.get('tags'))
+    && _.isEqual((new Date(this.get('create-date'))).getTime(), (new Date(this.get('create-date'))).getTime())
+    && _.isEqual((new Date(this.get('last-change-date'))).getTime(), (new Date(this.get('last-change-date'))).getTime())
+    && _.isEqual((new Date(this.get('last-metadata-change-date'))).getTime(), (new Date(this.get('last-metadata-change-date'))).getTime()))
   },
 
   defaults: {
@@ -247,12 +317,12 @@ var Note = Backbone.Model.extend({
     if(this._set(attrs, options)) {
       // If the content of the note was changed, update last-changed-date
       if (attrs["title"] || attrs["note-content"]) {
-        this.set({"last-change-date": Date.now().toISOString() });
+        this.set({"last-change-date": (new Date).toISOString() });
       }
       // If the metadata of the note was changed, update last-metadata-change-date
       if (attrs["tags"] || attrs["note-content-version"] || attrs["create-date"]
       || attrs["last-change-date"] || attrs["pinned"]) {
-        this.set({"last-metadata-change-date": Date.now().toISOString()});
+        this.set({"last-metadata-change-date": (new Date).toISOString()});
       }
       // _set was successful
       return true;
