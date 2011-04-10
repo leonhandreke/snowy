@@ -42,7 +42,7 @@
         <br />
         <input type="submit" value="{% trans "Log in" %}">
     </form>
-    <h2>...{% trans"or log in with" %}:</h2>
+    <h2>...{% trans "or log in with" %}:</h2>
     {% endif %}
     <div id="main-openid-provider-buttons">
         {% comment %}Initially visible provider buttons are inserted here{% endcomment %}
@@ -64,7 +64,6 @@
         <input type="button" id="openid-provider-username-submit" value="{% trans "Log in" %}">
     </div>
 
-    <br />
     <form style="display: none" id="openid-login-form" name="fopenid" action="{% url openid-login %}" method="post">
         <h3>{% trans "OpenID" %}</h3>
         <b>{{ openid_form.openid_identifier.label_tag }}</b>
