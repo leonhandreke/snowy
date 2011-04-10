@@ -67,6 +67,9 @@ function insertOpenIDProviderButtons() {
         $("#openid-provider-username").focus();
       }
       else {
+        // Hide the openID login form, otherwise the user would see
+        // the provider URL appearing in there
+        $("#openid-login-form").hide();
         // this provider has one URL for all users
         submitOpenIDLoginForm(provider.url);
       }
@@ -102,6 +105,8 @@ $(document).ready(function() {
    $(".openid-provider-button").button();
    // make all form submit buttons into jQuery buttons
    $("input:submit").button();
+   // make all regular form buttons into jQuery buttons
+   $("input:button").button();
 
    // bind the log in button in the openID username input "form"
    $("#openid-provider-username-submit").bind('click', function() {
