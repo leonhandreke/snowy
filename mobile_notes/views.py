@@ -23,9 +23,6 @@ from django.template import RequestContext
 
 from snowy.core.urlresolvers import reverse_full
 
-def mobile_note_index_redirect(request):
-    return HttpResponseRedirect(reverse_full('mobile_note_index'))
-
 def mobile_note_index(request):
     return render_to_response('mobile/index.html',
                               {'root_uri': reverse_full('api_root'),

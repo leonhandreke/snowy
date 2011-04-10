@@ -3,73 +3,35 @@
     <html>
     <head>
         <title>Slick Notes</title>
-        {% comments %}TODO: Figure out why DEBUG does not work{% endcomment %}
-        {% if True %}
-        <link rel="stylesheet" href="{{ MEDIA_URL }}css/jquery.mobile-1.0a4.1.css" />
+        {% comment %}TODO: Figure out why DEBUG does not work{% endcomment %}
+        {% if 1 %}
         <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.js" charset="utf-8"></script>
-        <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.tmpl.js" charset="utf-8"></script>
-        <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.tmpload.js" charset="utf-8"></script>
-        <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.mobile-1.0a4.1.js" charset="utf-8"></script>
         <script type="text/javascript" src="{{ MEDIA_URL }}js/underscore.js" charset="utf-8"></script>
         <script type="text/javascript" src="{{ MEDIA_URL }}js/backbone.js" charset="utf-8"></script>
+        <script src="{{ MEDIA_URL }}js/api-client.js"></script>
+
+        <link rel="stylesheet" href="{{ MEDIA_URL }}css/jquery.mobile-1.0a4.1.css" />
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.tmpl.js" charset="utf-8"></script>
+
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.mobile-1.0a4.1.js" charset="utf-8"></script>
+        <script src="{{ MEDIA_URL }}js/mobile-notes.js"></script>
         {% else %}
-        <link rel="stylesheet" href="{{ MEDIA_URL }}css/jquery.mobile-1.0a4.1.min.css" />
         <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.min.js" charset="utf-8"></script>
-        <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.tmpl.min.js" charset="utf-8"></script>
-        <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.tmpload.min.js" charset="utf-8"></script>
-        <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.mobile-1.0a4.1.min.js" charset="utf-8"></script>
         <script type="text/javascript" src="{{ MEDIA_URL }}js/underscore.min.js" charset="utf-8"></script>
         <script type="text/javascript" src="{{ MEDIA_URL }}js/backbone.min.js" charset="utf-8"></script>
-        {% endif %}
         <script src="{{ MEDIA_URL }}js/api-client.js"></script>
-        <script type="text/javascript">
 
-        $(function() {
-            // Set up controls
-            $('#wipe').bind('click', function(event) {
-            });
-            $('#beginSync').bind('click', function(event) {
-            });
+        <link rel="stylesheet" href="{{ MEDIA_URL }}css/jquery.mobile-1.0a4.1.min.css" />
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.tmpl.min.js" charset="utf-8"></script>
+        <script src="{{ MEDIA_URL }}js/mobile-notes.js"></script>
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.mobile-1.0a4.1.min.js" charset="utf-8"></script>
+        {% endif %}
 
-            // TODO: Refactor, move somewhere reasonable
-            function add_note_list_item(note) {
-                $('<li id="' + note.guid + '"><a href="#' + note.guid + '-page">' + note.title + '</a></li>').appendTo('#note-title-list');
-                $('li#' + note.guid).bind('mouseenter', note, function(event) {
-                    $('.note-content-page').remove();
-                    var note = event.data;
-                    $('<div data-role="page" class="note-content-page" id="' + note.guid + '-page">' +
-                      '<div data-role="header"><h1>' + note.title + '</h1></div>' +
-                      '<div data-role="content"><p>' + escape(note.content) + '</p></div>')
-                      .page()
-                      .insertAfter('#note-list-page');
-                });
-                //$('li#' + note.guid).bind('mouseleave', note, function(event) {
-                //    var note = event.data;
-                //    $('div#' + note.guid + '-page').remove();
-                //});
-                $("#note-title-list").listview('refresh');
-            }
-        });
-        </script>
     </head>
 
     <body>
-
-        <div data-role="page" id="main-page">
-            <div data-role="header"><h1>Slick Notes</h1></div>
-            <div data-role="content">
-                <a href="#" id="beginSync" data-role="button">Sync Notes</a>
-                <a href="#" id="wipe" data-role="button">Clear Offline Storage</a>
-                <a href="#note-list-page" data-role="button">View Notes List</a>
-            </div>
-        </div>
-
-        <div data-role="page" id="note-list-page">
-            <div data-role="header"><h1>Slick Notes</h1></div>
-            <div data-role="content">
-                <ul id="note-title-list" data-role="listview" />
-            </div>
-        </div>
+        <span id="template-main-view" style="display: none;">{% include "mobile/main_view.html" %}</span>
+        <span id="template-note-list-view" style="display: none;">{% include "mobile/note_list_view.html" %}</span>
 
     </body>
 </html>
