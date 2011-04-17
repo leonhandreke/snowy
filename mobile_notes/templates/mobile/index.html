@@ -23,15 +23,15 @@
 
         <link rel="stylesheet" href="{{ MEDIA_URL }}css/jquery.mobile-1.0a4.1.min.css" />
         <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.tmpl.min.js" charset="utf-8"></script>
-        <script src="{{ MEDIA_URL }}js/mobile-notes.js"></script>
         <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.mobile-1.0a4.1.min.js" charset="utf-8"></script>
+        <script src="{{ MEDIA_URL }}js/mobile-notes.js"></script>
         {% endif %}
 
     </head>
 
     <body>
-        <span id="template-main-view" style="display: none;">{% include "mobile/main_view.html" %}</span>
-        <span id="template-note-list-view" style="display: none;">{% include "mobile/note_list_view.html" %}</span>
+        <span id="template-main-page" style="display: none;">{% include "mobile/main_page.html" %}</span>
+        <span id="template-note-list-page" style="display: none;">{% include "mobile/note_list_page.html" %}</span>
 
     </body>
 </html>
