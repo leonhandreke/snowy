@@ -137,6 +137,7 @@ var snowySyncController = {
         // The revision on the server is newer
         // TODO: Some intelligent merging of local changes with new revision
         // Refresh the notes from server notes
+        collection.refresh(serverNotes);
         localStorage.updateAll(collection);
         // Fetch the working copy of the collection from localStorage
         collection.fetch();
@@ -149,6 +150,7 @@ var snowySyncController = {
         // have changed or have been deleted locally
         _.each(serverNotes, function(serverResponseNote) {
           var serverNote = new Note(serverResponseNote);
+          var localStorageNote = localStorage.find(serverNote);
           var localNote = new Note(localStorage.find(serverNote));
           // Check if this note on the server still exists locally
           if (localNote) {
@@ -191,7 +193,8 @@ var Store = function(name) {
   this.name = name;
   var store = localStorage.getItem(this.name);
   this.data = (store && JSON.parse(store)) || {};
-  this.syncRevision = localStorage.getItem(this.name + 'syncRevision') || 0;
+  // Set -1 as default for never synced
+  this.syncRevision = localStorage.getItem(this.name + 'syncRevision') || -1;
 };
 
 _.extend(Store.prototype, {
