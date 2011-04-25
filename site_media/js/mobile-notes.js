@@ -1,10 +1,66 @@
-var MainPage = Backbone.View.extend({
-  tagName: 'span',
+var AppController = Backbone.Controller.extend({
+
+  routes: {
+    '': 'mainView',
+    'note-list-view': 'noteListView'
+  },
+
+  mainView: function() {
+    var mainView = new MainView();
+    mainView.render();
+    this.transitionToView(mainView);
+  },
+
+  noteListView: function() {
+    var noteListView = new NoteListView({collection: Notes});
+    noteListView.render();
+    this.transitionToView(noteListView);
+  },
+
+  transitionToView: function(view) {
+    // Append the view
+    $('body').append(view.el);
+    // do jQuery mobile page magic
+    view.el.page();
+    // Transistion to the new page
+    // TODO: Some kind of history handling so the animation is reversed
+    // when going back
+    $.mobile.changePage(view.el);
+    /*// Enable all the fancy jQuery mobile page transition stuff
+    $.mobile.ajaxLinksEnabled = true;
+    $.mobile.ajaxEnabled = true;
+    $.mobile.hashListeningEnabled = true;
+    // trigger a hashchange to transition to the new page
+    $(window).trigger( "hashchange", [ true ] );
+    // Disable the page transitions again so we can do our
+    // own has change handling
+    $.mobile.ajaxLinksEnabled = false;
+    $.mobile.ajaxEnabled = false;
+    $.mobile.hashListeningEnabled = false;*/
+  }
+});
+
+// Extend Backbone.View with some useful utilities
+var mobileNotesViewUtils = {
+  updateElement: function(newElement) {
+    // Check if we already have an Element
+    if ($(this.el).html()) {
+      // Only replace the HTML content
+      $(this.el).html($(newElement).html());
+    } else {
+      // This is a totally new element
+      this.el = $(newElement);
+    }
+  }
+}
+_.extend(Backbone.View.prototype, mobileNotesViewUtils);
+
+var MainView = Backbone.View.extend({
   events: {
     'click #beginSync': 'beginSync'
   },
   template: function () {
-    return $('#template-main-page');
+    return mainViewTemplate;
   },
   initialize: function() {
     // Bind render method to always be executed within the context of
@@ -13,7 +69,7 @@ var MainPage = Backbone.View.extend({
   },
 
   render: function() {
-    $(this.el).html(this.template().tmpl());
+    this.updateElement($.tmpl(this.template()));
     return this;
   },
 
@@ -23,60 +79,38 @@ var MainPage = Backbone.View.extend({
   }
 });
 
-var NoteListPage = Backbone.View.extend({
-  tagName: 'span',
-  events: {
-  },
+var NoteListView = Backbone.View.extend({
   template: function () {
-    return $('#template-note-list-page');
+    return noteListViewTemplate;
   },
   initialize: function() {
     // Bind render method to always be executed within the context of
     // this object
     _.bindAll(this, 'render');
 
+    // Rebuild the whole list if something changes
+    this.collection.bind('change', this.render);
   },
 
   render: function() {
-    $(this.el).html(this.template().tmpl());
-    var listNode = this.$('ul');
-    // set up the items in the note list
-    for (var i = 0; i < this.collection.models.length; i++) {
-      var note = this.collection.at(i);
-      var rowView = new NoteRowView({model: note});
-      listNode.append(rowView.render().el);
-    }
-    return this;
+    var newElement = $.tmpl(noteListViewTemplate, {
+      notes: this.collection.models
+    });
+    this.updateElement(newElement);
   },
 
 });
-
-var NoteRowView = Backbone.View.extend({
-  tagName: 'li',
-  template: function() {
-    return $('#template-note-row-view');
-  },
-  initialize: function() {
-    //this.el = $('<li></li>');
-    _.bindAll(this, 'render');
-    this.model.bind('change', this.render);
-  },
-
-  render: function() {
-    $(this.el).html(this.template().tmpl(this.model.attributes));
-    return this;
-  }
-});
-
 
 $(document).ready(function() {
+  // Disable all jQuery mobile magic that breaks Backbone Controllers
+  $.mobile.ajaxLinksEnabled = false;
+  $.mobile.ajaxEnabled = false;
+  $.mobile.hashListeningEnabled = false;
+  // instantiate our own controller
+  var appController = new AppController()
+  // enable Backbone hashchange listening
+  Backbone.history.start();
   // fetch the notes from the local DB
-  Notes.fetch()
-
-  var mainPage = new MainPage();
-  $('body').append(mainPage.render().el);
-
-  var noteListPage = new NoteListPage({collection: Notes});
-  $('body').append(noteListPage.render().el);
+  Notes.fetch();
 });
 

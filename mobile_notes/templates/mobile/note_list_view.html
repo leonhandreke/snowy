@@ -1,0 +1,13 @@
+{% load raw %}
+{% raw %}
+<div data-role="page" id="note-list-view">
+    <div data-role="header"><h1>Slick Notes</h1></div>
+    <div data-role="content">
+        <ul id="note-title-list" data-role="listview">
+            {{each(i, note) notes}}
+            <li><a>${note.get('title')}</a></li>
+            {{/each}}
+        </ul>
+    </div>
+</div>
+{% endraw %}
