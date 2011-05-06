@@ -151,9 +151,11 @@ var snowySyncController = {
         _.each(serverNotes, function(serverResponseNote) {
           var serverNote = new Note(serverResponseNote);
           var localStorageNote = localStorage.find(serverNote);
-          var localNote = new Note(localStorage.find(serverNote));
           // Check if this note on the server still exists locally
-          if (localNote) {
+          if (localStorageNote) {
+            // create a real, comparable note object from the
+            // retrieved local record
+            var localNote = new Note(localStorageNote);
             // Check if the note has changed
             if (!serverNote.equals(localNote)) {
               // Note was updated locally, update with local content
