@@ -13,6 +13,8 @@ class DataStore(oauth.OAuthDataStore):
     def lookup_consumer(self, key):
         try:
             self.consumer = Consumer.objects.get(key=key)
+            self.consumer.key    = self.consumer.key.encode('ascii')
+            self.consumer.secret = self.consumer.secret.encode('ascii')
             return self.consumer
         except Consumer.DoesNotExist:
             return None
@@ -25,6 +27,8 @@ class DataStore(oauth.OAuthDataStore):
         try:
             self.request_token = Token.objects.get(key=token, 
                                                    token_type=token_type)
+            self.request_token.key    = self.request_token.key.encode('ascii')
+            self.request_token.secret = self.request_token.secret.encode('ascii')
             return self.request_token
         except Token.DoesNotExist:
             return None
