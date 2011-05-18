@@ -160,7 +160,7 @@ AUTH_PROFILE_MODULE = 'accounts.UserProfile'
 OPENID_CREATE_USERS = False
 
 LOGIN_REDIRECT_URL = '/'
-LOGIN_URL = '/accounts/openid/login/'
+LOGIN_URL = '/accounts/login/'
 
 AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend',
                            'django_openid_auth.auth.OpenIDBackend',
