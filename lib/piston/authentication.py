@@ -162,7 +162,7 @@ def oauth_request_token(request):
     try:
         token = oauth_server.fetch_request_token(oauth_request)
 
-        response = HttpResponse(token.to_string())
+        response = HttpResponse(token.to_string(), content_type="application/x-www-form-urlencoded")
     except oauth.OAuthError, err:
         response = send_oauth_error(err)
 
@@ -234,7 +234,7 @@ def oauth_access_token(request):
         
     try:
         token = oauth_server.fetch_access_token(oauth_request)
-        return HttpResponse(token.to_string())
+        return HttpResponse(token.to_string(), content_type="application/x-www-form-urlencoded")
     except oauth.OAuthError, err:
         return send_oauth_error(err)
 
